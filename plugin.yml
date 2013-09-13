@@ -1,0 +1,59 @@
+name: DSPlugin
+main: me.DSMinecraftServer.x64.craigj.DSPlugin.DSPlugin
+description: Douglas Scientific Geometry Plugin
+author: Action0Jackson
+version: 1.0.0
+
+commands:
+   encase:
+      description: Encases user in specified material.
+      usage: /<command> <player> <outermaterial> [innerMaterial]
+      permission: DSPlugin.encase
+      permission-message: You don't have <permission>
+   box:
+      description: Creates a box of the specified material types.
+      usage: /<command> <x> <y> <z> <length> <width> <height> <outerMaterial> [innerMaterial]
+      permission: DSPlugin.box
+      permission-message: You don't have <permission>
+   pyramid:
+      description: Creates a pyramid of the specified material and size.
+      usage: /<command> <x> <y> <z> <baseLength> <outerMaterial> [innerMaterial]
+      permission: DSPlugin.pyramid
+      permission-message: You don't have <permission>
+   sphere:
+      description: Creates a sphere of the specified material and size at center x,y,z.
+      usage: /<command> <x> <y> <z> <radius> <outermaterial> [innerMaterial] [maxTh] [maxPhi]
+      permission: DSPlugin.sphere
+      permission-message: You don't have <permission>
+   tunnel:
+      description: Creates a minecart tunnel of specified size starting at x,y,z.
+      usage: /<command> <x> <y> <z> <y-length-direction(N,S,E,W)> [y-length-direction(N,S,E,W)]...
+      permission: DSPlugin.tunnel
+      permission-message: You don't have <permission>
+      
+permissions:
+   DSPlugin.*:
+     description: Gives access to all DSPlugin commands
+     default: true
+     children:
+       DSPlugin.encase: true
+       DSPlugin.box: true
+       DSPlugin.pyramid: true
+       DSPlugin.sphere: true
+       DSPlugin.tunnel: true
+   DSPlugin.encase:
+     description: Allows you to encase another player in specified material
+     default: true
+   DSPlugin.box:
+     description: Allows you to create a box of specified material
+     default: true
+   DSPlugin.pyramid:
+     description: Allows you to create a pyramid of specified material
+     default: true
+   DSPlugin.sphere:
+     description: Allows you to create a sphere of specified material
+     default: true
+   DSPlugin.tunnel:
+     description: Allows you to create a minecart tunnel
+     default: true
+      
