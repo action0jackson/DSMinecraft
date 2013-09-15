@@ -1,5 +1,5 @@
 name: DSPlugin
-main: me.DSMinecraftServer.x64.craigj.DSPlugin.DSPlugin
+main: dsPlugin.DSPlugin
 description: Douglas Scientific Geometry Plugin
 author: Action0Jackson
 version: 1.0.0
