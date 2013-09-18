@@ -988,13 +988,13 @@ public class Commands
 					// Next iterate over radius
 					for (int r = ((args.length > 6) ? 0 : radius); r <= radius; r++)
 					{
-						location.setX(x + r * Math.sin(th * Math.PI / 180));
+						location.setX(x + r * Math.cos(th * Math.PI / 180));
 						location.setY(h);
 						location.setZ(z + r * Math.sin(th * Math.PI / 180));
 
 						block = world.getBlockAt(location);
 
-						if (r == radius)
+						if (r == radius || h == y || h == y + height)
 						{
 							block.setType(outerMaterial);
 						}
