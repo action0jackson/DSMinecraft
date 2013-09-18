@@ -39,6 +39,10 @@ public final class DSPlugin extends JavaPlugin
 		{
 			return Commands.tunnel(sender, cmd, label, args);
 		}
+		else if (cmd.getName().equalsIgnoreCase("cylinder"))
+		{
+			return Commands.cylinder(sender, cmd, label, args);
+		}
 
 		// If this hasn't happened the a value of false will be returned.
 		return false;

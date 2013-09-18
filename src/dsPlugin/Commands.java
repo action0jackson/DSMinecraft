@@ -904,4 +904,113 @@ public class Commands
 		// If this hasn't happened the a value of false will be returned.
 		return false;
 	}
+
+	public static boolean cylinder(CommandSender sender, Command cmd, String label, String[] args)
+	{
+		if (args.length == 6 || args.length == 7)
+		{
+			// Make sure first 4 parameters can be parsed as a string
+			int x;
+			int y;
+			int z;
+			int height;
+			int radius;
+			try
+			{
+				// Try block type as integer
+				x = Integer.parseInt(args[0]);
+				y = Integer.parseInt(args[1]);
+				z = Integer.parseInt(args[2]);
+				height = Math.abs(Integer.parseInt(args[3]));
+				radius = Math.abs(Integer.parseInt(args[4]));
+			}
+			catch (NumberFormatException ex)
+			{
+				sender.sendMessage("Unable to parse one of the parameters as integer!");
+				return true;
+			}
+
+			// Get Outer Block Material
+			Material outerMaterial = Library.getMaterial(args[5]);
+
+			if (outerMaterial == null)
+			{
+				sender.sendMessage(args[5].toUpperCase() + " is not a valid material or material ID!");
+				return true;
+			}
+
+			// Check to make sure block is a placeable block
+			if (!outerMaterial.isBlock())
+			{
+				sender.sendMessage(args[5].toUpperCase() + " is not a placeable block!");
+				return true;
+			}
+
+			// Get Inner Block Material
+			Material innerMaterial = null;
+			if (args.length > 6)
+			{
+				innerMaterial = Library.getMaterial(args[6]);
+
+				if (innerMaterial == null)
+				{
+					sender.sendMessage(args[6].toUpperCase() + " is not a valid material or material ID!");
+					return true;
+				}
+
+				// Check to make sure block is a placeable block
+				if (!innerMaterial.isBlock())
+				{
+					sender.sendMessage(args[6].toUpperCase() + " is not a placeable block!");
+					return true;
+				}
+			}
+
+			// All parameters are good Proceed building box
+			World world = sender.getServer().getWorld(sender.getServer().getWorlds().get(0).getName());
+			if (sender instanceof Player)
+			{
+				// Get current world of player
+				Player player = (Player) sender;
+				world = player.getWorld();
+			}
+
+			Block block = world.getBlockAt(x, y, z);
+			
+			Location location = block.getLocation();
+			
+			// First iterate height
+			for (int h = y; h <= y + height; h++)
+			{
+				// Next iterate th circle
+				for (int th = 0; th <= 360; th++)
+				{
+					// Next iterate over radius
+					for (int r = ((args.length > 6) ? 0 : radius); r <= radius; r++)
+					{
+						location.setX(x + r * Math.sin(th * Math.PI / 180));
+						location.setY(h);
+						location.setZ(z + r * Math.sin(th * Math.PI / 180));
+
+						block = world.getBlockAt(location);
+
+						if (r == radius)
+						{
+							block.setType(outerMaterial);
+						}
+						else
+						{
+							block.setType(innerMaterial);
+						}
+					}
+				}
+			}
+
+			sender.sendMessage("Cylinder successfully created!");
+			return true;
+		}
+
+		// If this hasn't happened the a value of false will be returned.
+		return false;
+	}
 }
