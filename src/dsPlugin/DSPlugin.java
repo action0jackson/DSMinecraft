@@ -43,6 +43,10 @@ public final class DSPlugin extends JavaPlugin
 		{
 			return Commands.cylinder(sender, cmd, label, args);
 		}
+		else if (cmd.getName().equalsIgnoreCase("pyramid2"))
+		{
+			return Commands.pyramid2(sender, cmd, label, args);
+		}
 
 		// If this hasn't happened the a value of false will be returned.
 		return false;

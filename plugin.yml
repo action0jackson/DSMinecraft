@@ -35,6 +35,11 @@ commands:
       usage: /<command> <x> <y> <z> <height> <radius> <outermaterial> [innerMaterial]
       permission: DSPlugin.cylinder
       permission-message: You don't have <permission>   
+   pyramid2:
+      description: Creates a pyramid of the specified material and size.
+      usage: /<command> <x> <y> <z> <radius> <outerMaterial> [innerMaterial]
+      permission: DSPlugin.pyramid2
+      permission-message: You don't have <permission>
       
 permissions:
    DSPlugin.*:
@@ -47,6 +52,7 @@ permissions:
        DSPlugin.sphere: true
        DSPlugin.tunnel: true
        DSPlugin.cylinder: true
+       DSPlugin.pyramid2: true
    DSPlugin.encase:
      description: Allows you to encase another player in specified material
      default: true
@@ -64,5 +70,8 @@ permissions:
      default: true
    DSPlugin.cylinder:
      description: Allows you to create a cylinder of specified material
+     default: true
+   DSPlugin.pyramid2:
+     description: Allows you to create a pyramid of specified material
      default: true
       

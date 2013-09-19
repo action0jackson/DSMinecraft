@@ -1013,4 +1013,146 @@ public class Commands
 		// If this hasn't happened the a value of false will be returned.
 		return false;
 	}
+
+	public static boolean pyramid2(CommandSender sender, Command cmd, String label, String[] args)
+	{
+		if (args.length == 5 || args.length == 6)
+		{
+			// Make sure first 4 parameters can be parsed as a integer
+			int x;
+			int y;
+			int z;
+			int radius;
+			
+			try
+			{
+				// Try block type as integer
+				x = Integer.parseInt(args[0]);
+				y = Integer.parseInt(args[1]);
+				z = Integer.parseInt(args[2]);
+				radius = Math.abs(Integer.parseInt(args[3]));
+			}
+			catch (NumberFormatException ex)
+			{
+				sender.sendMessage("Unable to parse one of the first 4 parameters as integer!");
+				return true;
+			}
+
+			// Get Outer Block Type
+			Material outerMaterial = Library.getMaterial(args[4]);
+
+			if (outerMaterial == null)
+			{
+				sender.sendMessage(args[4].toUpperCase() + " is not a valid material or material ID!");
+				return true;
+			}
+
+			// Check to make sure block is a placeable block
+			if (!outerMaterial.isBlock())
+			{
+				sender.sendMessage(args[4].toUpperCase() + " is not a placeable block!");
+				return true;
+			}
+
+			// Get Inner Block Type
+			Material innerMaterial = null;
+			
+			if (args.length == 6)
+			{
+				innerMaterial = Library.getMaterial(args[5]);
+
+				if (innerMaterial == null)
+				{
+					sender.sendMessage(args[5].toUpperCase() + " is not a valid material or material ID!");
+					return true;
+				}
+
+				// Check to make sure block is a placeable block
+				if (!innerMaterial.isBlock())
+				{
+					sender.sendMessage(args[5].toUpperCase() + " is not a placeable block!");
+					return true;
+				}
+			}
+
+			// All parameters are good, proceed building pyramid
+			World world = sender.getServer().getWorld(sender.getServer().getWorlds().get(0).getName());
+			
+			if (sender instanceof Player)
+			{
+				// Get current world of player
+				Player player = (Player) sender;
+				world = player.getWorld();
+			}
+
+			Block block1 = world.getBlockAt(x, y, z);
+			Block block2 = world.getBlockAt(x, y, z);
+			Block block3 = world.getBlockAt(x, y, z);
+			Block block4 = world.getBlockAt(x, y, z);
+			int radiusCounter = radius;
+			
+			for (int yCounter = 0; yCounter <= radius && radiusCounter > 0; yCounter++, radiusCounter--)
+			{
+				int rc = radiusCounter;
+				
+				for (int xCounter = 0; xCounter <= rc; xCounter++)
+				{
+					for (int zCounter = 0; zCounter <= rc - xCounter; zCounter++)
+					{
+						block1 = world.getBlockAt(x + xCounter, y + yCounter, z + zCounter);
+						block3 = world.getBlockAt(x - xCounter, y + yCounter, z - zCounter);
+						
+						if (xCounter != 0 && zCounter != 0)
+						{
+							block2 = world.getBlockAt(x + xCounter, y + yCounter, z - zCounter);
+							block4 = world.getBlockAt(x - xCounter, y + yCounter, z + zCounter);
+						}
+						
+						if (zCounter == rc)
+						{
+							block1.setType(outerMaterial);
+							
+							// If not at the center, set the block type.
+							if (xCounter != 0 && zCounter != 0)
+							{
+								block2.setType(outerMaterial);
+								block3.setType(outerMaterial);
+								block4.setType(outerMaterial);
+							}
+
+							// If not at the center but on one of the main axis lines, set the block type for Q3.
+							if ((xCounter == 0 || zCounter == 0) && !(xCounter == 0 && zCounter == 0))
+							{
+								block3.setType(outerMaterial);
+							}
+						}
+						else if (innerMaterial != null)
+						{
+							block1.setType(innerMaterial);
+
+							// If not at the center, set the block type.
+							if (xCounter != 0 && zCounter != 0)
+							{
+								block2.setType(innerMaterial);
+								block3.setType(innerMaterial);
+								block4.setType(innerMaterial);
+							}
+							
+							// If not at the center but on one of the main axis lines, set the block type for Q3.
+							if ((xCounter == 0 || zCounter == 0) && !(xCounter == 0 && zCounter == 0))
+							{
+								block3.setType(innerMaterial);
+							}
+						}
+					}
+				}
+			}
+			
+			sender.sendMessage("Pyramid successfully created!");
+			return true;
+		}
+
+		// If this hasn't happened the a value of false will be returned.
+		return false;
+	}
 }
