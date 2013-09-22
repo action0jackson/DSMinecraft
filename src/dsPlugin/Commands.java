@@ -421,7 +421,7 @@ public class Commands
 	}
 
 	public static boolean circle(CommandSender sender, Command cmd, String label, String[] args)
-	{		
+	{
 		if (args.length == 5)
 		{
 			String[] args2 = new String[7];
@@ -430,7 +430,7 @@ public class Commands
 			args2[2] = args[2];
 			args2[3] = args[3];
 			args2[4] = args[4];
-			args2[5] = args[4];  // Use same material for inside of circle
+			args2[5] = args[4]; // Use same material for inside of circle
 			args2[6] = "0"; // Have max th be 0
 
 			return sphere(sender, cmd, label, args2);
