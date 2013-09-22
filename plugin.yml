@@ -10,6 +10,21 @@ commands:
       usage: /<command> <player> <outermaterial> [innerMaterial]
       permission: DSPlugin.encase
       permission-message: You don't have <permission>
+   square:
+      description: Creates a square of the specified material.
+      usage: /<command> <x> <y> <z> <length> <material>
+      permission: DSPlugin.square
+      permission-message: You don't have <permission>      
+   cube:
+      description: Creates a cube of the specified material types.
+      usage: /<command> <x> <y> <z> <length> <outerMaterial> [innerMaterial]
+      permission: DSPlugin.cube
+      permission-message: You don't have <permission>
+   rectangle:
+      description: Creates a rectangle of the specified material.
+      usage: /<command> <x> <y> <z> <length> <width> <material>
+      permission: DSPlugin.rectangle
+      permission-message: You don't have <permission>            
    cuboid:
       description: Creates a cuboid of the specified material types.
       usage: /<command> <x> <y> <z> <length> <width> <height> <outerMaterial> [innerMaterial]
@@ -20,6 +35,11 @@ commands:
       usage: /<command> <x> <y> <z> <baseLength> <outerMaterial> [innerMaterial]
       permission: DSPlugin.pyramid
       permission-message: You don't have <permission>
+   circle:
+      description: Creates a circle of the specified material types.
+      usage: /<command> <x> <y> <z> <radius> <material>
+      permission: DSPlugin.circle
+      permission-message: You don't have <permission>      
    sphere:
       description: Creates a sphere of the specified material and size at center x,y,z.
       usage: /<command> <x> <y> <z> <radius> <outermaterial> [innerMaterial] [maxTh] [maxPhi]
@@ -47,6 +67,10 @@ permissions:
      default: true
      children:
        DSPlugin.encase: true
+       DSPlugin.square: true
+       DSPlugin.cube: true
+       DSPlugin.rectangle: true
+       DSPlugin.circle: true
        DSPlugin.cuboid: true
        DSPlugin.pyramid: true
        DSPlugin.sphere: true
@@ -55,6 +79,18 @@ permissions:
        DSPlugin.pyramid2: true
    DSPlugin.encase:
      description: Allows you to encase another player in specified material
+     default: true
+   DSPlugin.square:
+     description: Allows you to create a square of specified material
+     default: true
+   DSPlugin.cube:
+     description: Allows you to create a cube of specified material
+     default: true
+   DSPlugin.rectangle:
+     description: Allows you to create a rectangle of specified material
+     default: true
+   DSPlugin.circle:
+     description: Allows you to create a circle of specified material
      default: true
    DSPlugin.cuboid:
      description: Allows you to create a cuboid of specified material

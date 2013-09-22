@@ -47,6 +47,22 @@ public final class DSPlugin extends JavaPlugin
 		{
 			return Commands.pyramid2(sender, cmd, label, args);
 		}
+		else if (cmd.getName().equalsIgnoreCase("square"))
+		{
+			return Commands.square(sender, cmd, label, args);
+		}
+		else if (cmd.getName().equalsIgnoreCase("rectangle"))
+		{
+			return Commands.rectangle(sender, cmd, label, args);
+		}
+		else if (cmd.getName().equalsIgnoreCase("cube"))
+		{
+			return Commands.cube(sender, cmd, label, args);
+		}
+		else if (cmd.getName().equalsIgnoreCase("circle"))
+		{
+			return Commands.circle(sender, cmd, label, args);
+		}
 
 		// If this hasn't happened the a value of false will be returned.
 		return false;

@@ -116,6 +116,68 @@ public class Commands
 		return false;
 	}
 
+	public static boolean square(CommandSender sender, Command cmd, String label, String[] args)
+	{
+		if (args.length == 5)
+		{
+			String[] args2 = new String[6];
+			args2[0] = args[0];
+			args2[1] = args[1];
+			args2[2] = args[2];
+			args2[3] = args[3];
+			args2[4] = args[3]; // Width same as Length
+			args2[5] = args[4];
+
+			return rectangle(sender, cmd, label, args2);
+		}
+
+		// If this hasn't happened the a value of false will be returned.
+		return false;
+	}
+
+	public static boolean cube(CommandSender sender, Command cmd, String label, String[] args)
+	{
+		if (args.length == 5 || args.length == 6)
+		{
+			String[] args2 = (args.length == 5 ? new String[6] : new String[7]);
+			args2[0] = args[0];
+			args2[1] = args[1];
+			args2[2] = args[2];
+			args2[3] = args[3];
+			args2[4] = args[3]; // Width same as Length
+			args2[5] = args[3]; // Height same as Length
+			if (args.length == 6)
+			{
+				args2[6] = args[4];
+			}
+
+			return cuboid(sender, cmd, label, args2);
+		}
+
+		// If this hasn't happened the a value of false will be returned.
+		return false;
+	}
+
+	public static boolean rectangle(CommandSender sender, Command cmd, String label, String[] args)
+	{
+		if (args.length == 6)
+		{
+			String[] args2 = new String[7];
+			args2[0] = args[0];
+			args2[1] = args[1];
+			args2[2] = args[2];
+			args2[3] = args[3];
+			args2[4] = args[4];
+			args2[5] = "1"; // Height of 1
+			args2[6] = args[5];
+
+			return cuboid(sender, cmd, label, args2);
+		}
+
+		// If this hasn't happened the a value of false will be returned.
+		return false;
+	}
+
 	public static boolean cuboid(CommandSender sender, Command cmd, String label, String[] args)
 	{
 		if (args.length == 8 || args.length == 7)
@@ -321,12 +383,14 @@ public class Commands
 									block.setType(outerMaterial);
 									block.setData((byte) 0, true);
 								}
-								else if (w == (z + (baseLength - (h - 1)) - 1)) // Orientation 3
+								else if (w == (z + (baseLength - (h - 1)) - 1)) // Orientation
+																				// 3
 								{
 									block.setType(outerMaterial);
 									block.setData((byte) 3, true);
 								}
-								else if (l == (x + (baseLength - (h - 1)) - 1)) // Orientation 4
+								else if (l == (x + (baseLength - (h - 1)) - 1)) // Orientation
+																				// 4
 								{
 									block.setType(outerMaterial);
 									block.setData((byte) 1, true);
@@ -350,6 +414,26 @@ public class Commands
 
 			sender.sendMessage("Pyramid successfully created!");
 			return true;
+		}
+
+		// If this hasn't happened the a value of false will be returned.
+		return false;
+	}
+
+	public static boolean circle(CommandSender sender, Command cmd, String label, String[] args)
+	{		
+		if (args.length == 5)
+		{
+			String[] args2 = new String[7];
+			args2[0] = args[0];
+			args2[1] = args[1];
+			args2[2] = args[2];
+			args2[3] = args[3];
+			args2[4] = args[4];
+			args2[5] = args[4];  // Use same material for inside of circle
+			args2[6] = "0"; // Have max th be 0
+
+			return sphere(sender, cmd, label, args2);
 		}
 
 		// If this hasn't happened the a value of false will be returned.
@@ -976,9 +1060,9 @@ public class Commands
 			}
 
 			Block block = world.getBlockAt(x, y, z);
-			
+
 			Location location = block.getLocation();
-			
+
 			// First iterate height
 			for (int h = y; h <= y + height; h++)
 			{
@@ -1023,7 +1107,7 @@ public class Commands
 			int y;
 			int z;
 			int radius;
-			
+
 			try
 			{
 				// Try block type as integer
@@ -1056,7 +1140,7 @@ public class Commands
 
 			// Get Inner Block Type
 			Material innerMaterial = null;
-			
+
 			if (args.length == 6)
 			{
 				innerMaterial = Library.getMaterial(args[5]);
@@ -1077,7 +1161,7 @@ public class Commands
 
 			// All parameters are good, proceed building pyramid
 			World world = sender.getServer().getWorld(sender.getServer().getWorlds().get(0).getName());
-			
+
 			if (sender instanceof Player)
 			{
 				// Get current world of player
@@ -1090,28 +1174,28 @@ public class Commands
 			Block block3 = world.getBlockAt(x, y, z);
 			Block block4 = world.getBlockAt(x, y, z);
 			int radiusCounter = radius;
-			
+
 			for (int yCounter = 0; yCounter <= radius && radiusCounter > 0; yCounter++, radiusCounter--)
 			{
 				int rc = radiusCounter;
-				
+
 				for (int xCounter = 0; xCounter <= rc; xCounter++)
 				{
 					for (int zCounter = 0; zCounter <= rc - xCounter; zCounter++)
 					{
 						block1 = world.getBlockAt(x + xCounter, y + yCounter, z + zCounter);
 						block3 = world.getBlockAt(x - xCounter, y + yCounter, z - zCounter);
-						
+
 						if (xCounter != 0 && zCounter != 0)
 						{
 							block2 = world.getBlockAt(x + xCounter, y + yCounter, z - zCounter);
 							block4 = world.getBlockAt(x - xCounter, y + yCounter, z + zCounter);
 						}
-						
+
 						if (zCounter == rc)
 						{
 							block1.setType(outerMaterial);
-							
+
 							// If not at the center, set the block type.
 							if (xCounter != 0 && zCounter != 0)
 							{
@@ -1120,7 +1204,8 @@ public class Commands
 								block4.setType(outerMaterial);
 							}
 
-							// If not at the center but on one of the main axis lines, set the block type for Q3.
+							// If not at the center but on one of the main axis
+							// lines, set the block type for Q3.
 							if ((xCounter == 0 || zCounter == 0) && !(xCounter == 0 && zCounter == 0))
 							{
 								block3.setType(outerMaterial);
@@ -1137,8 +1222,9 @@ public class Commands
 								block3.setType(innerMaterial);
 								block4.setType(innerMaterial);
 							}
-							
-							// If not at the center but on one of the main axis lines, set the block type for Q3.
+
+							// If not at the center but on one of the main axis
+							// lines, set the block type for Q3.
 							if ((xCounter == 0 || zCounter == 0) && !(xCounter == 0 && zCounter == 0))
 							{
 								block3.setType(innerMaterial);
@@ -1147,7 +1233,7 @@ public class Commands
 					}
 				}
 			}
-			
+
 			sender.sendMessage("Pyramid successfully created!");
 			return true;
 		}
