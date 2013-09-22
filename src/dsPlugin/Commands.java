@@ -139,16 +139,17 @@ public class Commands
 	{
 		if (args.length == 5 || args.length == 6)
 		{
-			String[] args2 = (args.length == 5 ? new String[6] : new String[7]);
+			String[] args2 = (args.length == 5 ? new String[7] : new String[8]);
 			args2[0] = args[0];
 			args2[1] = args[1];
 			args2[2] = args[2];
 			args2[3] = args[3];
 			args2[4] = args[3]; // Width same as Length
 			args2[5] = args[3]; // Height same as Length
+			args2[6] = args[4];
 			if (args.length == 6)
 			{
-				args2[6] = args[4];
+				args2[7] = args[5];
 			}
 
 			return cuboid(sender, cmd, label, args2);
@@ -424,14 +425,15 @@ public class Commands
 	{
 		if (args.length == 5)
 		{
-			String[] args2 = new String[7];
+			String[] args2 = new String[8];
 			args2[0] = args[0];
 			args2[1] = args[1];
 			args2[2] = args[2];
 			args2[3] = args[3];
 			args2[4] = args[4];
 			args2[5] = args[4]; // Use same material for inside of circle
-			args2[6] = "0"; // Have max th be 0
+			args2[6] = "0"; // Have maxTh be 360
+			args2[7] = "360"; // Have maxPhi be 0
 
 			return sphere(sender, cmd, label, args2);
 		}
