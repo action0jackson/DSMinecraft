@@ -97,7 +97,7 @@ public class Commands
 					args2[6] = outerMaterial.name();
 					args2[7] = innerMaterial.name();
 
-					box(sender, cmd, label, args2);
+					cuboid(sender, cmd, label, args2);
 
 					target.sendMessage(ChatColor.BLUE + (culprit == null ? "Server" : culprit.getDisplayName())
 							+ ChatColor.WHITE + " has encased you in " + outerMaterial.name() + " and "
@@ -116,7 +116,7 @@ public class Commands
 		return false;
 	}
 
-	public static boolean box(CommandSender sender, Command cmd, String label, String[] args)
+	public static boolean cuboid(CommandSender sender, Command cmd, String label, String[] args)
 	{
 		if (args.length == 8 || args.length == 7)
 		{

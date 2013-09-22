@@ -23,9 +23,9 @@ public final class DSPlugin extends JavaPlugin
 		{
 			return Commands.encase(sender, cmd, label, args);
 		}
-		else if (cmd.getName().equalsIgnoreCase("box"))
+		else if (cmd.getName().equalsIgnoreCase("cuboid"))
 		{
-			return Commands.box(sender, cmd, label, args);
+			return Commands.cuboid(sender, cmd, label, args);
 		}
 		else if (cmd.getName().equalsIgnoreCase("pyramid"))
 		{

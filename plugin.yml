@@ -2,7 +2,7 @@ name: DSPlugin
 main: dsPlugin.DSPlugin
 description: Douglas Scientific Geometry Plugin
 author: Action0Jackson
-version: 1.0.0
+version: 1.0.1
 
 commands:
    encase:
@@ -10,10 +10,10 @@ commands:
       usage: /<command> <player> <outermaterial> [innerMaterial]
       permission: DSPlugin.encase
       permission-message: You don't have <permission>
-   box:
-      description: Creates a box of the specified material types.
+   cuboid:
+      description: Creates a cuboid of the specified material types.
       usage: /<command> <x> <y> <z> <length> <width> <height> <outerMaterial> [innerMaterial]
-      permission: DSPlugin.box
+      permission: DSPlugin.cuboid
       permission-message: You don't have <permission>
    pyramid:
       description: Creates a pyramid of the specified material and size.
@@ -47,7 +47,7 @@ permissions:
      default: true
      children:
        DSPlugin.encase: true
-       DSPlugin.box: true
+       DSPlugin.cuboid: true
        DSPlugin.pyramid: true
        DSPlugin.sphere: true
        DSPlugin.tunnel: true
@@ -56,8 +56,8 @@ permissions:
    DSPlugin.encase:
      description: Allows you to encase another player in specified material
      default: true
-   DSPlugin.box:
-     description: Allows you to create a box of specified material
+   DSPlugin.cuboid:
+     description: Allows you to create a cuboid of specified material
      default: true
    DSPlugin.pyramid:
      description: Allows you to create a pyramid of specified material
