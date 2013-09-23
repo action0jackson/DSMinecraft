@@ -432,8 +432,8 @@ public class Commands
 			args2[3] = args[3];
 			args2[4] = args[4];
 			args2[5] = args[4]; // Use same material for inside of circle
-			args2[6] = "0"; // Have maxTh be 360
-			args2[7] = "360"; // Have maxPhi be 0
+			args2[6] = "360"; // Have maxTh be 360
+			args2[7] = "0"; // Have maxPhi be 0
 
 			return sphere(sender, cmd, label, args2);
 		}
@@ -528,9 +528,9 @@ public class Commands
 				{
 					for (int r = ((args.length > 5) ? 0 : radius); r <= radius; r++)
 					{
-						location.setX(x + r * Math.cos(phi * Math.PI / 180) * Math.sin(th * Math.PI / 180));
-						location.setY(y + r * Math.cos(th * Math.PI / 180));
-						location.setZ(z + r * Math.sin(phi * Math.PI / 180) * Math.sin(th * Math.PI / 180));
+						location.setX(x + r * Math.cos(th * Math.PI / 180) * Math.cos(phi * Math.PI / 180));
+						location.setY(y + r * Math.sin(phi * Math.PI / 180));
+						location.setZ(z + r * Math.sin(th * Math.PI / 180) * Math.cos(phi * Math.PI / 180));
 
 						block = world.getBlockAt(location);
 
