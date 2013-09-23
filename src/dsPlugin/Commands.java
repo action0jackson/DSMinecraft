@@ -1171,7 +1171,7 @@ public class Commands
 				world = player.getWorld();
 			}
 
-			Block block1 = world.getBlockAt(x, y, z);
+			/*Block block1 = world.getBlockAt(x, y, z);
 			Block block2 = world.getBlockAt(x, y, z);
 			Block block3 = world.getBlockAt(x, y, z);
 			Block block4 = world.getBlockAt(x, y, z);
@@ -1234,7 +1234,7 @@ public class Commands
 						}
 					}
 				}
-			}
+			}*/
 
 			sender.sendMessage("Pyramid successfully created!");
 			return true;

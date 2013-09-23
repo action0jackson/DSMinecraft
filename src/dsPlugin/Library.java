@@ -1,6 +1,8 @@
 package dsPlugin;
 
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 
 public class Library
 {
@@ -83,6 +85,40 @@ public class Library
 		public void set_direction(Direction _direction)
 		{
 			this._direction = _direction;
+		}
+	}
+
+	public static class Coordinate
+	{
+		public int X = 0;
+		public int Y = 0;
+		public int Z = 0;
+	}
+
+	public static void createVerticalTriangle(World world, Coordinate startCoord, Material innerMaterial, Material outerMaterial, int distance)
+	{
+		int maxY = startCoord.Y + distance;
+		
+		for (int y = startCoord.Y, xCounter = distance; y <= maxY && xCounter >= 0; y++, xCounter--)
+		{
+			int maxX = startCoord.X + xCounter;
+			int minX = startCoord.X - xCounter;
+			
+			// Grow X.
+			for (int x = minX; x <= maxX; x++)
+			{
+				Block block = world.getBlockAt(x, y, startCoord.Z);
+				
+				// If last block, set to outerMaterial, otherwise innerMaterial.
+				if (x == minX || x == maxX || y == startCoord.Y)
+				{
+					block.setType(outerMaterial);
+				}
+				else
+				{
+					block.setType(innerMaterial);
+				}
+			}
 		}
 	}
 }
