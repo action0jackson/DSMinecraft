@@ -64,7 +64,7 @@ public final class DSPlugin extends JavaPlugin
 			return Commands.circle(sender, cmd, label, args);
 		}
 
-		// If this hasn't happened the a value of false will be returned.
+		// If this hasn't happened, then a value of false will be returned.
 		return false;
 	}
 }
