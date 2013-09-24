@@ -56,7 +56,7 @@ commands:
       permission: DSPlugin.cylinder
       permission-message: You don't have <permission>   
    pyramid2:
-      description: Creates a pyramid of the specified material and size.
+      description: Creates a pyramid of the specified material and size.  Negative radius will generate an inverted pyramid.
       usage: /<command> <x> <y> <z> <radius> <outerMaterial> [innerMaterial]
       permission: DSPlugin.pyramid2
       permission-message: You don't have <permission>
