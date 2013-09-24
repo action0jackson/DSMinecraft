@@ -90,21 +90,29 @@ public class Library
 
 	public static class Coordinate
 	{
+		public Coordinate ()
+		{
+		}
+		
+		public Coordinate(int _x, int _y, int _z)
+		{
+			X = _x;
+			Y = _y;
+			Z = _z;
+		}
+		
 		public int X = 0;
 		public int Y = 0;
 		public int Z = 0;
 	}
 
-	public static void createVerticalTriangle(World world, Coordinate startCoord, Material innerMaterial, Material outerMaterial, int distance)
+	public static void createVerticalTriangle(World world, Coordinate startCoord, Material innerMaterial, Material outerMaterial, int distance, boolean isInverted)
 	{
-		int maxY = startCoord.Y + distance;
-		
-		for (int y = startCoord.Y, xCounter = distance; y <= maxY && xCounter >= 0; y++, xCounter--)
+		for (int y = startCoord.Y, xCounter = distance; xCounter >= 0; xCounter--)
 		{
-			int maxX = startCoord.X + xCounter;
 			int minX = startCoord.X - xCounter;
+			int maxX = startCoord.X + xCounter;
 			
-			// Grow X.
 			for (int x = minX; x <= maxX; x++)
 			{
 				Block block = world.getBlockAt(x, y, startCoord.Z);
@@ -116,8 +124,21 @@ public class Library
 				}
 				else
 				{
-					block.setType(innerMaterial);
+					if (innerMaterial != null)
+					{
+						block.setType(innerMaterial);
+					}
 				}
+			}
+			
+			// If inverted, decrement, otherwise increment.
+			if (isInverted == true)
+			{
+				y--;
+			}
+			else
+			{
+				y++;
 			}
 		}
 	}

@@ -1109,6 +1109,7 @@ public class Commands
 			int y;
 			int z;
 			int radius;
+			boolean isInverted = false;
 
 			try
 			{
@@ -1117,6 +1118,11 @@ public class Commands
 				y = Integer.parseInt(args[1]);
 				z = Integer.parseInt(args[2]);
 				radius = Math.abs(Integer.parseInt(args[3]));
+				
+				if (Integer.parseInt(args[3]) < 0)
+				{
+					isInverted = true;
+				}
 			}
 			catch (NumberFormatException ex)
 			{
@@ -1170,77 +1176,22 @@ public class Commands
 				Player player = (Player) sender;
 				world = player.getWorld();
 			}
-
-			/*Block block1 = world.getBlockAt(x, y, z);
-			Block block2 = world.getBlockAt(x, y, z);
-			Block block3 = world.getBlockAt(x, y, z);
-			Block block4 = world.getBlockAt(x, y, z);
-			int radiusCounter = radius;
-
-			for (int yCounter = 0; yCounter <= radius && radiusCounter > 0; yCounter++, radiusCounter--)
+			
+			// Create the center triangle.
+			Library.createVerticalTriangle(world, new Library.Coordinate(x, y, z), innerMaterial, outerMaterial, radius, isInverted);
+			
+			// Create consecutively smaller triangles in the +Z and -Z directions.
+			for (int r = radius - 1, zCounter = 1; r >= 0; r--, zCounter++)
 			{
-				int rc = radiusCounter;
-
-				for (int xCounter = 0; xCounter <= rc; xCounter++)
-				{
-					for (int zCounter = 0; zCounter <= rc - xCounter; zCounter++)
-					{
-						block1 = world.getBlockAt(x + xCounter, y + yCounter, z + zCounter);
-						block3 = world.getBlockAt(x - xCounter, y + yCounter, z - zCounter);
-
-						if (xCounter != 0 && zCounter != 0)
-						{
-							block2 = world.getBlockAt(x + xCounter, y + yCounter, z - zCounter);
-							block4 = world.getBlockAt(x - xCounter, y + yCounter, z + zCounter);
-						}
-
-						if (zCounter == rc)
-						{
-							block1.setType(outerMaterial);
-
-							// If not at the center, set the block type.
-							if (xCounter != 0 && zCounter != 0)
-							{
-								block2.setType(outerMaterial);
-								block3.setType(outerMaterial);
-								block4.setType(outerMaterial);
-							}
-
-							// If not at the center but on one of the main axis
-							// lines, set the block type for Q3.
-							if ((xCounter == 0 || zCounter == 0) && !(xCounter == 0 && zCounter == 0))
-							{
-								block3.setType(outerMaterial);
-							}
-						}
-						else if (innerMaterial != null)
-						{
-							block1.setType(innerMaterial);
-
-							// If not at the center, set the block type.
-							if (xCounter != 0 && zCounter != 0)
-							{
-								block2.setType(innerMaterial);
-								block3.setType(innerMaterial);
-								block4.setType(innerMaterial);
-							}
-
-							// If not at the center but on one of the main axis
-							// lines, set the block type for Q3.
-							if ((xCounter == 0 || zCounter == 0) && !(xCounter == 0 && zCounter == 0))
-							{
-								block3.setType(innerMaterial);
-							}
-						}
-					}
-				}
-			}*/
+				Library.createVerticalTriangle(world, new Library.Coordinate(x, y, z + zCounter), innerMaterial, outerMaterial, r, isInverted);
+				Library.createVerticalTriangle(world, new Library.Coordinate(x, y, z - zCounter), innerMaterial, outerMaterial, r, isInverted);
+			}
 
 			sender.sendMessage("Pyramid successfully created!");
 			return true;
 		}
 
-		// If this hasn't happened the a value of false will be returned.
+		// If this hasn't happened, then a value of false will be returned.
 		return false;
 	}
 }
