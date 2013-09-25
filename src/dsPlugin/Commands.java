@@ -1102,96 +1102,22 @@ public class Commands
 
 	public static boolean pyramid2(CommandSender sender, Command cmd, String label, String[] args)
 	{
-		if (args.length == 5 || args.length == 6)
+		return Library.createPyramid(sender, cmd, label, args, true);
+	}
+
+	public static boolean octahedron(CommandSender sender, Command cmd, String label, String[] args)
+	{
+		if (args.length < 5)
 		{
-			// Make sure first 4 parameters can be parsed as a integer
-			int x;
-			int y;
-			int z;
-			int radius;
-			boolean isInverted = false;
-
-			try
-			{
-				// Try block type as integer
-				x = Integer.parseInt(args[0]);
-				y = Integer.parseInt(args[1]);
-				z = Integer.parseInt(args[2]);
-				radius = Math.abs(Integer.parseInt(args[3]));
-				
-				if (Integer.parseInt(args[3]) < 0)
-				{
-					isInverted = true;
-				}
-			}
-			catch (NumberFormatException ex)
-			{
-				sender.sendMessage("Unable to parse one of the first 4 parameters as integer!");
-				return true;
-			}
-
-			// Get Outer Block Type
-			Material outerMaterial = Library.getMaterial(args[4]);
-
-			if (outerMaterial == null)
-			{
-				sender.sendMessage(args[4].toUpperCase() + " is not a valid material or material ID!");
-				return true;
-			}
-
-			// Check to make sure block is a placeable block
-			if (!outerMaterial.isBlock())
-			{
-				sender.sendMessage(args[4].toUpperCase() + " is not a placeable block!");
-				return true;
-			}
-
-			// Get Inner Block Type
-			Material innerMaterial = null;
-
-			if (args.length == 6)
-			{
-				innerMaterial = Library.getMaterial(args[5]);
-
-				if (innerMaterial == null)
-				{
-					sender.sendMessage(args[5].toUpperCase() + " is not a valid material or material ID!");
-					return true;
-				}
-
-				// Check to make sure block is a placeable block
-				if (!innerMaterial.isBlock())
-				{
-					sender.sendMessage(args[5].toUpperCase() + " is not a placeable block!");
-					return true;
-				}
-			}
-
-			// All parameters are good, proceed building pyramid
-			World world = sender.getServer().getWorld(sender.getServer().getWorlds().get(0).getName());
-
-			if (sender instanceof Player)
-			{
-				// Get current world of player
-				Player player = (Player) sender;
-				world = player.getWorld();
-			}
-			
-			// Create the center triangle.
-			Library.createVerticalTriangle(world, new Library.Coordinate(x, y, z), innerMaterial, outerMaterial, radius, isInverted);
-			
-			// Create consecutively smaller triangles in the +Z and -Z directions.
-			for (int r = radius - 1, zCounter = 1; r >= 0; r--, zCounter++)
-			{
-				Library.createVerticalTriangle(world, new Library.Coordinate(x, y, z + zCounter), innerMaterial, outerMaterial, r, isInverted);
-				Library.createVerticalTriangle(world, new Library.Coordinate(x, y, z - zCounter), innerMaterial, outerMaterial, r, isInverted);
-			}
-
-			sender.sendMessage("Pyramid successfully created!");
-			return true;
+			return false;
 		}
-
-		// If this hasn't happened, then a value of false will be returned.
-		return false;
+		
+		boolean firstHalf = Library.createPyramid(sender, cmd, label, args, false);
+		
+		// Flip the sign on the radius to draw the other half of the pyramid.
+		args[3] = Integer.toString(Integer.parseInt(args[3]) * -1);
+		boolean secondHalf = Library.createPyramid(sender, cmd, label, args, false);
+		
+		return firstHalf && secondHalf;
 	}
 }

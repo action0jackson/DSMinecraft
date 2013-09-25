@@ -63,6 +63,10 @@ public final class DSPlugin extends JavaPlugin
 		{
 			return Commands.circle(sender, cmd, label, args);
 		}
+		else if (cmd.getName().equalsIgnoreCase("octahedron"))
+		{
+			return Commands.octahedron(sender, cmd, label, args);
+		}
 
 		// If this hasn't happened, then a value of false will be returned.
 		return false;

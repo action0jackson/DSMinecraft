@@ -3,6 +3,9 @@ package dsPlugin;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class Library
 {
@@ -106,7 +109,8 @@ public class Library
 		public int Z = 0;
 	}
 
-	public static void createVerticalTriangle(World world, Coordinate startCoord, Material innerMaterial, Material outerMaterial, int distance, boolean isInverted)
+	public static void createVerticalTriangle(World world, Coordinate startCoord, Material innerMaterial, Material outerMaterial, 
+			int distance, boolean isInverted, boolean includeBase)
 	{
 		for (int y = startCoord.Y, xCounter = distance; xCounter >= 0; xCounter--)
 		{
@@ -118,7 +122,7 @@ public class Library
 				Block block = world.getBlockAt(x, y, startCoord.Z);
 				
 				// If last block, set to outerMaterial, otherwise innerMaterial.
-				if (x == minX || x == maxX || y == startCoord.Y)
+				if (x == minX || x == maxX || (y == startCoord.Y && includeBase))
 				{
 					block.setType(outerMaterial);
 				}
@@ -141,5 +145,100 @@ public class Library
 				y++;
 			}
 		}
+	}
+
+	public static boolean createPyramid(CommandSender sender, Command cmd, String label, String[] args, boolean includeBase)
+	{
+		if (args.length == 5 || args.length == 6)
+		{
+			// Make sure first 4 parameters can be parsed as a integer
+			int x;
+			int y;
+			int z;
+			int radius;
+			boolean isInverted = false;
+
+			try
+			{
+				// Try block type as integer
+				x = Integer.parseInt(args[0]);
+				y = Integer.parseInt(args[1]);
+				z = Integer.parseInt(args[2]);
+				radius = Math.abs(Integer.parseInt(args[3]));
+				
+				if (Integer.parseInt(args[3]) < 0)
+				{
+					isInverted = true;
+				}
+			}
+			catch (NumberFormatException ex)
+			{
+				sender.sendMessage("Unable to parse one of the first 4 parameters as integer!");
+				return true;
+			}
+
+			// Get Outer Block Type
+			Material outerMaterial = Library.getMaterial(args[4]);
+
+			if (outerMaterial == null)
+			{
+				sender.sendMessage(args[4].toUpperCase() + " is not a valid material or material ID!");
+				return true;
+			}
+
+			// Check to make sure block is a placeable block
+			if (!outerMaterial.isBlock())
+			{
+				sender.sendMessage(args[4].toUpperCase() + " is not a placeable block!");
+				return true;
+			}
+
+			// Get Inner Block Type
+			Material innerMaterial = null;
+
+			if (args.length == 6)
+			{
+				innerMaterial = Library.getMaterial(args[5]);
+
+				if (innerMaterial == null)
+				{
+					sender.sendMessage(args[5].toUpperCase() + " is not a valid material or material ID!");
+					return true;
+				}
+
+				// Check to make sure block is a placeable block
+				if (!innerMaterial.isBlock())
+				{
+					sender.sendMessage(args[5].toUpperCase() + " is not a placeable block!");
+					return true;
+				}
+			}
+
+			// All parameters are good, proceed building pyramid
+			World world = sender.getServer().getWorld(sender.getServer().getWorlds().get(0).getName());
+
+			if (sender instanceof Player)
+			{
+				// Get current world of player
+				Player player = (Player) sender;
+				world = player.getWorld();
+			}
+			
+			// Create the center triangle.
+			Library.createVerticalTriangle(world, new Library.Coordinate(x, y, z), innerMaterial, outerMaterial, radius, isInverted, includeBase);
+			
+			// Create consecutively smaller triangles in the +Z and -Z directions.
+			for (int r = radius - 1, zCounter = 1; r >= 0; r--, zCounter++)
+			{
+				createVerticalTriangle(world, new Library.Coordinate(x, y, z + zCounter), innerMaterial, outerMaterial, r, isInverted, includeBase);
+				createVerticalTriangle(world, new Library.Coordinate(x, y, z - zCounter), innerMaterial, outerMaterial, r, isInverted, includeBase);
+			}
+
+			sender.sendMessage("Pyramid successfully created!");
+			return true;
+		}
+
+		// If this hasn't happened, then a value of false will be returned.
+		return false;
 	}
 }

@@ -1,8 +1,8 @@
 name: DSPlugin
 main: dsPlugin.DSPlugin
-description: Douglas Scientific Geometry Plugin
-author: Action0Jackson
-version: 1.0.1
+description: CraftBukkit Geometry Plugin (of sorts)
+author: Action0Jackson, GandalfsShoe
+version: 0.9.0
 
 commands:
    encase:
@@ -41,7 +41,7 @@ commands:
       permission: DSPlugin.circle
       permission-message: You don't have <permission>      
    sphere:
-      description: Creates a sphere of the specified material and size at center x,y,z.
+      description: Creates a sphere of the specified material and size center at x,y,z.
       usage: /<command> <x> <y> <z> <radius> <outermaterial> [innerMaterial] [maxTh] [maxPhi]
       permission: DSPlugin.sphere
       permission-message: You don't have <permission>
@@ -51,14 +51,19 @@ commands:
       permission: DSPlugin.tunnel
       permission-message: You don't have <permission>
    cylinder:
-      description: Create a cylinder of the specified material and size at center x,y,z.
+      description: Create a cylinder of the specified material and size with center at x,y,z.
       usage: /<command> <x> <y> <z> <height> <radius> <outermaterial> [innerMaterial]
       permission: DSPlugin.cylinder
       permission-message: You don't have <permission>   
    pyramid2:
-      description: Creates a pyramid of the specified material and size.  Negative radius will generate an inverted pyramid.
+      description: Creates a pyramid of the specified material and size with center at x,y,z.  Negative radius will generate an inverted pyramid.
       usage: /<command> <x> <y> <z> <radius> <outerMaterial> [innerMaterial]
       permission: DSPlugin.pyramid2
+      permission-message: You don't have <permission>  
+   octahedron:
+      description: Creates an octahedron of the specified material and size with center at x,y,z.
+      usage: /<command> <x> <y> <z> <radius> <outerMaterial> [innerMaterial]
+      permission: DSPlugin.octahedron
       permission-message: You don't have <permission>
       
 permissions:
@@ -77,6 +82,7 @@ permissions:
        DSPlugin.tunnel: true
        DSPlugin.cylinder: true
        DSPlugin.pyramid2: true
+       DSPlugin.octahedron: true
    DSPlugin.encase:
      description: Allows you to encase another player in specified material
      default: true
@@ -109,5 +115,8 @@ permissions:
      default: true
    DSPlugin.pyramid2:
      description: Allows you to create a pyramid of specified material
+     default: true
+   DSPlugin.octahedron:
+     description: Allows you to create an octahedron of specified material
      default: true
       
