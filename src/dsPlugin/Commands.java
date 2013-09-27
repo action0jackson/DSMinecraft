@@ -1111,13 +1111,113 @@ public class Commands
 		{
 			return false;
 		}
-		
+
 		boolean firstHalf = Library.createPyramid(sender, cmd, label, args, false);
-		
+
 		// Flip the sign on the radius to draw the other half of the pyramid.
 		args[3] = Integer.toString(Integer.parseInt(args[3]) * -1);
 		boolean secondHalf = Library.createPyramid(sender, cmd, label, args, false);
-		
+
 		return firstHalf && secondHalf;
+	}
+
+	public static boolean ellipsoid(CommandSender sender, Command cmd, String label, String[] args)
+	{
+		if (args.length > 6 && args.length < 9)
+		{
+			// Make sure first 6 parameters can be parsed as a string
+			int x;
+			int y;
+			int z;
+			int a;
+			int b;
+			int c;
+			try
+			{
+				// Try block type as integer
+				x = Integer.parseInt(args[0]);
+				y = Integer.parseInt(args[1]);
+				z = Integer.parseInt(args[2]);
+				a = Integer.parseInt(args[3]);
+				b = Integer.parseInt(args[4]);
+				c = Integer.parseInt(args[5]);
+			}
+			catch (NumberFormatException ex)
+			{
+				sender.sendMessage("Unable to parse one of the parameters as integer!");
+				return true;
+			}
+
+			// Get Outer Block Material
+			Material outerMaterial = Library.getMaterial(args[6]);
+
+			if (outerMaterial == null)
+			{
+				sender.sendMessage(args[6].toUpperCase() + " is not a valid material or material ID!");
+				return true;
+			}
+
+			// Check to make sure block is a placeable block
+			if (!outerMaterial.isBlock())
+			{
+				sender.sendMessage(args[6].toUpperCase() + " is not a placeable block!");
+				return true;
+			}
+
+			// Get Inner Block Material
+			Material innerMaterial = null;
+			if (args.length > 7)
+			{
+				innerMaterial = Library.getMaterial(args[7]);
+
+				if (innerMaterial == null)
+				{
+					sender.sendMessage(args[7].toUpperCase() + " is not a valid material or material ID!");
+					return true;
+				}
+
+				// Check to make sure block is a placeable block
+				if (!innerMaterial.isBlock())
+				{
+					sender.sendMessage(args[7].toUpperCase() + " is not a placeable block!");
+					return true;
+				}
+			}
+
+			// All parameters are good Proceed building box
+			World world = sender.getServer().getWorld(sender.getServer().getWorlds().get(0).getName());
+			if (sender instanceof Player)
+			{
+				// Get current world of player
+				Player player = (Player) sender;
+				world = player.getWorld();
+			}
+
+			Block block = world.getBlockAt(x, y, z);
+
+			Location location = block.getLocation();
+
+			// First iterate th circle
+			for (int th = 0; th <= 360; th++)
+			{
+				// Next iterate phi circle
+				for (int phi = 0; phi <= 360; phi++)
+				{
+					location.setX(Math.rint(x + a * Math.cos(th * Math.PI / 180) * Math.cos(phi * Math.PI / 180)));
+					location.setY(Math.rint(y + c * Math.sin(phi * Math.PI / 180)));
+					location.setZ(Math.rint(z + b * Math.sin(th * Math.PI / 180) * Math.cos(phi * Math.PI / 180)));
+
+					block = world.getBlockAt(location);
+
+					block.setType(outerMaterial);
+				}
+			}
+
+			sender.sendMessage("Sphere successfully created!");
+			return true;
+		}
+
+		// If this hasn't happened the a value of false will be returned.
+		return false;
 	}
 }

@@ -8,13 +8,13 @@ public final class DSPlugin extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
-		//getLogger().info("onEnable has been invoked!");
+		getLogger().info("DSPlugin Succesfully Loaded!");
 	}
 
 	@Override
 	public void onDisable()
 	{
-		//getLogger().info("onDisable has been invoked!");
+		getLogger().info("DSPlugin Succesfully Unloaded!");
 	}
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -66,6 +66,10 @@ public final class DSPlugin extends JavaPlugin
 		else if (cmd.getName().equalsIgnoreCase("octahedron"))
 		{
 			return Commands.octahedron(sender, cmd, label, args);
+		}
+		else if (cmd.getName().equalsIgnoreCase("ellipsoid"))
+		{
+			return Commands.ellipsoid(sender, cmd, label, args);
 		}
 
 		// If this hasn't happened, then a value of false will be returned.
