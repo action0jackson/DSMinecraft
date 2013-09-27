@@ -528,9 +528,9 @@ public class Commands
 				{
 					for (int r = ((args.length > 5) ? 0 : radius); r <= radius; r++)
 					{
-						location.setX(x + r * Math.cos(th * Math.PI / 180) * Math.cos(phi * Math.PI / 180));
-						location.setY(y + r * Math.sin(phi * Math.PI / 180));
-						location.setZ(z + r * Math.sin(th * Math.PI / 180) * Math.cos(phi * Math.PI / 180));
+						location.setX(Math.rint(x + r * Math.cos(th * Math.PI / 180) * Math.cos(phi * Math.PI / 180)));
+						location.setY(Math.rint(y + r * Math.sin(phi * Math.PI / 180)));
+						location.setZ(Math.rint(z + r * Math.sin(th * Math.PI / 180) * Math.cos(phi * Math.PI / 180)));
 
 						block = world.getBlockAt(location);
 
@@ -1074,9 +1074,9 @@ public class Commands
 					// Next iterate over radius
 					for (int r = ((args.length > 6) ? 0 : radius); r <= radius; r++)
 					{
-						location.setX(x + r * Math.cos(th * Math.PI / 180));
+						location.setX(Math.rint(x + r * Math.cos(th * Math.PI / 180)));
 						location.setY(h);
-						location.setZ(z + r * Math.sin(th * Math.PI / 180));
+						location.setZ(Math.rint(z + r * Math.sin(th * Math.PI / 180)));
 
 						block = world.getBlockAt(location);
 
