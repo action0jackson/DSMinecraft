@@ -67,7 +67,7 @@ commands:
       permission-message: You don't have <permission>
    ellipsoid:
       description: Creates an ellipsoid of the specified material and size.
-      usage: /<command> <x> <y> <z> <a> <b> <c> <outerMaterial> [innerMaterial]
+      usage: /<command> <x> <y> <z> <a> <b> <c> <outerMaterial> [innerMaterial] [maxTh] [maxPhi]
       permission: DSPlugin.ellipsoid
       permission-message: You don't have <permission>
       

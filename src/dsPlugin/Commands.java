@@ -446,108 +446,28 @@ public class Commands
 	{
 		if (args.length > 4 && args.length < 9)
 		{
-			// Make sure first 4 parameters can be parsed as a string
-			int x;
-			int y;
-			int z;
-			int radius;
-			int maxTh = 360;
-			int maxPhi = 360;
-			try
+			String[] args2 = new String[args.length + 2];
+			args2[0] = args[0]; // x
+			args2[1] = args[1]; // y
+			args2[2] = args[2]; // z
+			args2[3] = args[3]; // a
+			args2[4] = args[3]; // b same as a
+			args2[5] = args[3]; // c same as a
+			args2[6] = args[4]; // Inner material
+			if (args.length == 6)
 			{
-				// Try block type as integer
-				x = Integer.parseInt(args[0]);
-				y = Integer.parseInt(args[1]);
-				z = Integer.parseInt(args[2]);
-				radius = Math.abs(Integer.parseInt(args[3]));
-				if (args.length > 6)
-					maxTh = Math.abs(Integer.parseInt(args[6]));
-				if (args.length > 7)
-					maxPhi = Math.abs(Integer.parseInt(args[7]));
+				args2[7] = args[5];
 			}
-			catch (NumberFormatException ex)
+			if (args.length == 7)
 			{
-				sender.sendMessage("Unable to parse one of the parameters as integer!");
-				return true;
+				args2[8] = args[6];
+			}
+			if (args.length == 8)
+			{
+				args2[9] = args[7];
 			}
 
-			// Get Outer Block Material
-			Material outerMaterial = Library.getMaterial(args[4]);
-
-			if (outerMaterial == null)
-			{
-				sender.sendMessage(args[4].toUpperCase() + " is not a valid material or material ID!");
-				return true;
-			}
-
-			// Check to make sure block is a placeable block
-			if (!outerMaterial.isBlock())
-			{
-				sender.sendMessage(args[4].toUpperCase() + " is not a placeable block!");
-				return true;
-			}
-
-			// Get Inner Block Material
-			Material innerMaterial = null;
-			if (args.length > 5)
-			{
-				innerMaterial = Library.getMaterial(args[5]);
-
-				if (innerMaterial == null)
-				{
-					sender.sendMessage(args[5].toUpperCase() + " is not a valid material or material ID!");
-					return true;
-				}
-
-				// Check to make sure block is a placeable block
-				if (!innerMaterial.isBlock())
-				{
-					sender.sendMessage(args[5].toUpperCase() + " is not a placeable block!");
-					return true;
-				}
-			}
-
-			// All parameters are good Proceed building box
-			World world = sender.getServer().getWorld(sender.getServer().getWorlds().get(0).getName());
-			if (sender instanceof Player)
-			{
-				// Get current world of player
-				Player player = (Player) sender;
-				world = player.getWorld();
-			}
-
-			Block block = world.getBlockAt(x, y, z);
-
-			Location location = block.getLocation();
-
-			// First iterate th circle
-			for (int th = 0; th <= maxTh; th++)
-			{
-				// Next iterate phi circle
-				for (int phi = 0; phi <= maxPhi; phi++)
-				{
-					for (int r = ((args.length > 5) ? 0 : radius); r <= radius; r++)
-					{
-						location.setX(Math.rint(x + r * Math.cos(th * Math.PI / 180) * Math.cos(phi * Math.PI / 180)));
-						location.setY(Math.rint(y + r * Math.sin(phi * Math.PI / 180)));
-						location.setZ(Math.rint(z + r * Math.sin(th * Math.PI / 180) * Math.cos(phi * Math.PI / 180)));
-
-						block = world.getBlockAt(location);
-
-						if (r == radius)
-						{
-							block.setType(outerMaterial);
-						}
-						else
-						{
-							block.setType(innerMaterial);
-						}
-					}
-				}
-			}
-
-			sender.sendMessage("Sphere successfully created!");
-			return true;
+			return ellipsoid(sender, cmd, label, args2);
 		}
 
 		// If this hasn't happened the a value of false will be returned.
@@ -1123,7 +1043,7 @@ public class Commands
 
 	public static boolean ellipsoid(CommandSender sender, Command cmd, String label, String[] args)
 	{
-		if (args.length > 6 && args.length < 9)
+		if (args.length > 6 && args.length < 11)
 		{
 			// Make sure first 6 parameters can be parsed as a string
 			int x;
@@ -1132,6 +1052,8 @@ public class Commands
 			int a;
 			int b;
 			int c;
+			int maxTh = 360;
+			int maxPhi = 360;
 			try
 			{
 				// Try block type as integer
@@ -1141,6 +1063,10 @@ public class Commands
 				a = Integer.parseInt(args[3]);
 				b = Integer.parseInt(args[4]);
 				c = Integer.parseInt(args[5]);
+				if (args.length > 8)
+					maxTh = Math.abs(Integer.parseInt(args[8]));
+				if (args.length > 9)
+					maxPhi = Math.abs(Integer.parseInt(args[9]));
 			}
 			catch (NumberFormatException ex)
 			{
@@ -1198,22 +1124,139 @@ public class Commands
 			Location location = block.getLocation();
 
 			// First iterate th circle
-			for (int th = 0; th <= 360; th++)
+			for (int th = 0; th <= maxTh; th++)
 			{
 				// Next iterate phi circle
-				for (int phi = 0; phi <= 360; phi++)
+				for (int phi = 0; phi <= maxPhi; phi++)
 				{
-					location.setX(Math.rint(x + a * Math.cos(th * Math.PI / 180) * Math.cos(phi * Math.PI / 180)));
-					location.setY(Math.rint(y + c * Math.sin(phi * Math.PI / 180)));
-					location.setZ(Math.rint(z + b * Math.sin(th * Math.PI / 180) * Math.cos(phi * Math.PI / 180)));
+					// Next iterate over a chord
+					for (int aChord = 0; aChord <= a; aChord++)
+					{
+						location.setX(Math.rint(x + aChord * Math.cos(th * Math.PI / 180)
+								* Math.cos(phi * Math.PI / 180)));
 
-					block = world.getBlockAt(location);
+						// if b equals a use same loop
+						if (b == a)
+						{
+							location.setY(Math.rint(y + aChord * Math.sin(phi * Math.PI / 180)));
 
-					block.setType(outerMaterial);
+							// Check if c equals a to use the same loop
+							if (c == a)
+							{
+								location.setZ(Math.rint(z + aChord * Math.sin(th * Math.PI / 180)
+										* Math.cos(phi * Math.PI / 180)));
+
+								block = world.getBlockAt(location);
+
+								if (aChord == a)
+								{
+									block.setType(outerMaterial);
+								}
+								else
+								{
+									block.setType(innerMaterial);
+								}
+							}
+							else
+							{
+								// Need to iterate c chord since it is not equal
+								// to a
+								for (int cChord = 0; cChord <= c; cChord++)
+								{
+									location.setZ(Math.rint(z + cChord * Math.sin(th * Math.PI / 180)
+											* Math.cos(phi * Math.PI / 180)));
+
+									block = world.getBlockAt(location);
+
+									if (aChord == a || cChord == c)
+									{
+										block.setType(outerMaterial);
+									}
+									else
+									{
+										block.setType(innerMaterial);
+									}
+								}
+							}
+						}
+						else
+						{
+							// Check if c equals a to use the same loop
+							if (c == a)
+							{
+								location.setZ(Math.rint(z + aChord * Math.sin(th * Math.PI / 180)
+										* Math.cos(phi * Math.PI / 180)));
+
+								// Next iterate over b chord
+								for (int bChord = 0; bChord <= b; bChord++)
+								{
+									location.setY(Math.rint(y + bChord * Math.sin(phi * Math.PI / 180)));
+
+									block = world.getBlockAt(location);
+
+									if (aChord == a || bChord == b)
+									{
+										block.setType(outerMaterial);
+									}
+									else
+									{
+										block.setType(innerMaterial);
+									}
+								}
+							}
+							else
+							{
+								// Next iterate over b chord
+								for (int bChord = 0; bChord <= b; bChord++)
+								{
+									location.setY(Math.rint(y + bChord * Math.sin(phi * Math.PI / 180)));
+
+									// Check if c equals b to use the same loop
+									if (c == b)
+									{
+										location.setZ(Math.rint(z + bChord * Math.sin(th * Math.PI / 180)
+												* Math.cos(phi * Math.PI / 180)));
+
+										block = world.getBlockAt(location);
+
+										if (aChord == a || bChord == c)
+										{
+											block.setType(outerMaterial);
+										}
+										else
+										{
+											block.setType(innerMaterial);
+										}
+									}
+									else
+									{
+										// Need to iterate c chord since it is
+										// not equal to b
+										for (int cChord = 0; cChord <= c; cChord++)
+										{
+											location.setZ(Math.rint(z + cChord * Math.sin(th * Math.PI / 180)
+													* Math.cos(phi * Math.PI / 180)));
+
+											block = world.getBlockAt(location);
+
+											if (aChord == a || bChord == b || cChord == c)
+											{
+												block.setType(outerMaterial);
+											}
+											else
+											{
+												block.setType(innerMaterial);
+											}
+										}
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 
-			sender.sendMessage("Sphere successfully created!");
+			sender.sendMessage("Ellipsoid successfully created!");
 			return true;
 		}
 
