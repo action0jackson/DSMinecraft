@@ -39,6 +39,10 @@ public final class DSPlugin extends JavaPlugin
 		{
 			return Commands.tunnel(sender, cmd, label, args);
 		}
+		else if (cmd.getName().equalsIgnoreCase("cone"))
+		{
+			return Commands.cone(sender, cmd, label, args);
+		}
 		else if (cmd.getName().equalsIgnoreCase("cylinder"))
 		{
 			return Commands.cylinder(sender, cmd, label, args);

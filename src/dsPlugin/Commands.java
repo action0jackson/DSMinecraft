@@ -911,16 +911,17 @@ public class Commands
 		return false;
 	}
 
-	public static boolean cylinder(CommandSender sender, Command cmd, String label, String[] args)
+	public static boolean cone(CommandSender sender, Command cmd, String label, String[] args)
 	{
-		if (args.length == 6 || args.length == 7)
+		if (args.length == 7 || args.length == 8)
 		{
-			// Make sure first 4 parameters can be parsed as a string
+			// Make sure first 4 parameters can be parsed as int
 			int x;
 			int y;
 			int z;
 			int height;
-			int radius;
+			int radius1;
+			int radius2;
 			try
 			{
 				// Try block type as integer
@@ -928,7 +929,8 @@ public class Commands
 				y = Integer.parseInt(args[1]);
 				z = Integer.parseInt(args[2]);
 				height = Math.abs(Integer.parseInt(args[3]));
-				radius = Math.abs(Integer.parseInt(args[4]));
+				radius1 = Math.abs(Integer.parseInt(args[4]));
+				radius2 = Math.abs(Integer.parseInt(args[5]));
 			}
 			catch (NumberFormatException ex)
 			{
@@ -937,37 +939,37 @@ public class Commands
 			}
 
 			// Get Outer Block Material
-			Material outerMaterial = Library.getMaterial(args[5]);
+			Material outerMaterial = Library.getMaterial(args[6]);
 
 			if (outerMaterial == null)
 			{
-				sender.sendMessage(args[5].toUpperCase() + " is not a valid material or material ID!");
+				sender.sendMessage(args[6].toUpperCase() + " is not a valid material or material ID!");
 				return true;
 			}
 
 			// Check to make sure block is a placeable block
 			if (!outerMaterial.isBlock())
 			{
-				sender.sendMessage(args[5].toUpperCase() + " is not a placeable block!");
+				sender.sendMessage(args[6].toUpperCase() + " is not a placeable block!");
 				return true;
 			}
 
 			// Get Inner Block Material
 			Material innerMaterial = null;
-			if (args.length > 6)
+			if (args.length > 7)
 			{
-				innerMaterial = Library.getMaterial(args[6]);
+				innerMaterial = Library.getMaterial(args[7]);
 
 				if (innerMaterial == null)
 				{
-					sender.sendMessage(args[6].toUpperCase() + " is not a valid material or material ID!");
+					sender.sendMessage(args[7].toUpperCase() + " is not a valid material or material ID!");
 					return true;
 				}
 
 				// Check to make sure block is a placeable block
 				if (!innerMaterial.isBlock())
 				{
-					sender.sendMessage(args[6].toUpperCase() + " is not a placeable block!");
+					sender.sendMessage(args[7].toUpperCase() + " is not a placeable block!");
 					return true;
 				}
 			}
@@ -988,11 +990,13 @@ public class Commands
 			// First iterate height
 			for (int h = y; h <= y + height; h++)
 			{
+				double maxRadius = ((radius2 - radius1) / height) * (h - y) + radius1;
+
 				// Next iterate th circle
 				for (int th = 0; th <= 360; th++)
 				{
 					// Next iterate over radius
-					for (int r = ((args.length > 6) ? 0 : radius); r <= radius; r++)
+					for (int r = 0; r <= maxRadius; r++)
 					{
 						location.setX(Math.rint(x + r * Math.cos(th * Math.PI / 180)));
 						location.setY(h);
@@ -1000,7 +1004,7 @@ public class Commands
 
 						block = world.getBlockAt(location);
 
-						if (r == radius || h == y || h == y + height)
+						if (r == maxRadius || h == y || h == y + height)
 						{
 							block.setType(outerMaterial);
 						}
@@ -1012,8 +1016,32 @@ public class Commands
 				}
 			}
 
-			sender.sendMessage("Cylinder successfully created!");
+			sender.sendMessage("Cone successfully created!");
 			return true;
+		}
+
+		// If this hasn't happened the a value of false will be returned.
+		return false;
+	}
+
+	public static boolean cylinder(CommandSender sender, Command cmd, String label, String[] args)
+	{
+		if (args.length == 6 || args.length == 7)
+		{
+			String[] args2 = new String[args.length + 1];
+			args2[0] = args[0]; // x
+			args2[1] = args[1]; // y
+			args2[2] = args[2]; // z
+			args2[3] = args[3]; // height
+			args2[4] = args[4]; // radius1
+			args2[5] = args[4]; // radius2 = radius1
+			args2[6] = args[5]; // Outer Material
+			if (args.length == 7)
+			{
+				args2[7] = args[6]; // Inner Material
+			}
+
+			return cone(sender, cmd, label, args2);
 		}
 
 		// If this hasn't happened the a value of false will be returned.
