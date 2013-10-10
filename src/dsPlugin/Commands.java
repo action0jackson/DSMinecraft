@@ -991,9 +991,10 @@ public class Commands
 			for (int h = y; h <= y + height; h++)
 			{
 				double maxRadius = ((double) (radius2 - radius1) / height) * (h - y) + radius1;
+				double minAngle = Library.minRequiredAngle(maxRadius);
 
 				// Next iterate th circle
-				for (int th = 0; th <= 360; th++)
+				for (double th = 0; th <= 360.0; th += minAngle)
 				{
 					// Next iterate over radius
 					for (int r = 0; r <= Math.rint(maxRadius); r++)

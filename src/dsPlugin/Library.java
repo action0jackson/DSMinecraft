@@ -93,34 +93,34 @@ public class Library
 
 	public static class Coordinate
 	{
-		public Coordinate ()
+		public Coordinate()
 		{
 		}
-		
+
 		public Coordinate(int _x, int _y, int _z)
 		{
 			X = _x;
 			Y = _y;
 			Z = _z;
 		}
-		
+
 		public int X = 0;
 		public int Y = 0;
 		public int Z = 0;
 	}
 
-	public static void createVerticalTriangle(World world, Coordinate startCoord, Material innerMaterial, Material outerMaterial, 
-			int distance, boolean isInverted, boolean includeBase)
+	public static void createVerticalTriangle(World world, Coordinate startCoord, Material innerMaterial,
+			Material outerMaterial, int distance, boolean isInverted, boolean includeBase)
 	{
 		for (int y = startCoord.Y, xCounter = distance; xCounter >= 0; xCounter--)
 		{
 			int minX = startCoord.X - xCounter;
 			int maxX = startCoord.X + xCounter;
-			
+
 			for (int x = minX; x <= maxX; x++)
 			{
 				Block block = world.getBlockAt(x, y, startCoord.Z);
-				
+
 				// If last block, set to outerMaterial, otherwise innerMaterial.
 				if (x == minX || x == maxX || (y == startCoord.Y && includeBase))
 				{
@@ -134,7 +134,7 @@ public class Library
 					}
 				}
 			}
-			
+
 			// If inverted, decrement, otherwise increment.
 			if (isInverted == true)
 			{
@@ -147,7 +147,8 @@ public class Library
 		}
 	}
 
-	public static boolean createPyramid(CommandSender sender, Command cmd, String label, String[] args, boolean includeBase)
+	public static boolean createPyramid(CommandSender sender, Command cmd, String label, String[] args,
+			boolean includeBase)
 	{
 		if (args.length == 5 || args.length == 6)
 		{
@@ -165,7 +166,7 @@ public class Library
 				y = Integer.parseInt(args[1]);
 				z = Integer.parseInt(args[2]);
 				radius = Math.abs(Integer.parseInt(args[3]));
-				
+
 				if (Integer.parseInt(args[3]) < 0)
 				{
 					isInverted = true;
@@ -223,15 +224,19 @@ public class Library
 				Player player = (Player) sender;
 				world = player.getWorld();
 			}
-			
+
 			// Create the center triangle.
-			Library.createVerticalTriangle(world, new Library.Coordinate(x, y, z), innerMaterial, outerMaterial, radius, isInverted, includeBase);
-			
-			// Create consecutively smaller triangles in the +Z and -Z directions.
+			Library.createVerticalTriangle(world, new Library.Coordinate(x, y, z), innerMaterial, outerMaterial,
+					radius, isInverted, includeBase);
+
+			// Create consecutively smaller triangles in the +Z and -Z
+			// directions.
 			for (int r = radius - 1, zCounter = 1; r >= 0; r--, zCounter++)
 			{
-				createVerticalTriangle(world, new Library.Coordinate(x, y, z + zCounter), innerMaterial, outerMaterial, r, isInverted, includeBase);
-				createVerticalTriangle(world, new Library.Coordinate(x, y, z - zCounter), innerMaterial, outerMaterial, r, isInverted, includeBase);
+				createVerticalTriangle(world, new Library.Coordinate(x, y, z + zCounter), innerMaterial, outerMaterial,
+						r, isInverted, includeBase);
+				createVerticalTriangle(world, new Library.Coordinate(x, y, z - zCounter), innerMaterial, outerMaterial,
+						r, isInverted, includeBase);
 			}
 
 			sender.sendMessage("Pyramid successfully created!");
@@ -240,5 +245,17 @@ public class Library
 
 		// If this hasn't happened, then a value of false will be returned.
 		return false;
+	}
+
+	public static double minRequiredAngle(double radius)
+	{
+		try
+		{
+			return 2 * Math.asin(1 / (2 * radius));
+		}
+		catch (Exception ex)
+		{
+			return 1.0;
+		}
 	}
 }
