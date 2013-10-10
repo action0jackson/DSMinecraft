@@ -990,13 +990,13 @@ public class Commands
 			// First iterate height
 			for (int h = y; h <= y + height; h++)
 			{
-				double maxRadius = ((radius2 - radius1) / height) * (h - y) + radius1;
+				double maxRadius = ((double) (radius2 - radius1) / height) * (h - y) + radius1;
 
 				// Next iterate th circle
 				for (int th = 0; th <= 360; th++)
 				{
 					// Next iterate over radius
-					for (int r = 0; r <= maxRadius; r++)
+					for (int r = 0; r <= Math.rint(maxRadius); r++)
 					{
 						location.setX(Math.rint(x + r * Math.cos(th * Math.PI / 180)));
 						location.setY(h);
@@ -1004,13 +1004,14 @@ public class Commands
 
 						block = world.getBlockAt(location);
 
-						if (r == maxRadius || h == y || h == y + height)
+						if (r == Math.rint(maxRadius) || h == y || h == y + height)
 						{
 							block.setType(outerMaterial);
 						}
 						else
 						{
-							block.setType(innerMaterial);
+							if (innerMaterial != null)
+								block.setType(innerMaterial);
 						}
 					}
 				}
