@@ -426,11 +426,11 @@ public class Commands
 		if (args.length == 5)
 		{
 			String[] args2 = new String[8];
-			args2[0] = args[0];
-			args2[1] = args[1];
-			args2[2] = args[2];
-			args2[3] = args[3];
-			args2[4] = args[4];
+			args2[0] = args[0]; // x
+			args2[1] = args[1]; // y
+			args2[2] = args[2]; // z
+			args2[3] = args[3]; // radius
+			args2[4] = args[4]; // outer material
 			args2[5] = args[4]; // Use same material for inside of circle
 			args2[6] = "360"; // Have maxTh be 360
 			args2[7] = "0"; // Have maxPhi be 0
@@ -453,24 +453,27 @@ public class Commands
 			args2[3] = args[3]; // a
 			args2[4] = args[3]; // b same as a
 			args2[5] = args[3]; // c same as a
-			args2[6] = args[4]; // Inner material
+			args2[6] = args[4]; // Outer material
 			if (args.length == 6)
 			{
 				args2[7] = args[5];
 			}
 			if (args.length == 7)
 			{
+				args2[7] = args[5];
 				args2[8] = args[6];
 			}
 			if (args.length == 8)
 			{
+				args2[7] = args[5];
+				args2[8] = args[6];
 				args2[9] = args[7];
 			}
 
 			return ellipsoid(sender, cmd, label, args2);
 		}
 
-		// If this hasn't happened the a value of false will be returned.
+		// If this hasn't happened a value of false will be returned.
 		return false;
 	}
 
@@ -1153,11 +1156,14 @@ public class Commands
 
 			Location location = block.getLocation();
 
+			// Figure minAngle for worst case scenario (take greatest chord length)
+			double minAngle = Library.minRequiredAngle(Math.max(Math.max(a, b), c));
+
 			// First iterate th circle
-			for (int th = 0; th <= maxTh; th++)
+			for (double th = 0; th <= maxTh; th += minAngle)
 			{
 				// Next iterate phi circle
-				for (int phi = 0; phi <= maxPhi; phi++)
+				for (double phi = 0; phi <= maxPhi; phi += minAngle)
 				{
 					// Next iterate over a chord
 					for (int aChord = 0; aChord <= a; aChord++)
