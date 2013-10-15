@@ -931,7 +931,7 @@ public class Commands
 				x = Integer.parseInt(args[0]);
 				y = Integer.parseInt(args[1]);
 				z = Integer.parseInt(args[2]);
-				height = Math.abs(Integer.parseInt(args[3]));
+				height = Integer.parseInt(args[3]);
 				radius1 = Math.abs(Integer.parseInt(args[4]));
 				radius2 = Math.abs(Integer.parseInt(args[5]));
 			}
@@ -991,7 +991,7 @@ public class Commands
 			Location location = block.getLocation();
 
 			// First iterate height
-			for (int h = y; h <= y + height; h++)
+			for (int h = y; Math.signum(height) == -1.0 ? h >= y + height : h <= y + height; h+=Math.rint(Math.signum(height)))
 			{
 				double maxRadius = ((double) (radius2 - radius1) / height) * (h - y) + radius1;
 				double minAngle = Library.minRequiredAngle(maxRadius);
