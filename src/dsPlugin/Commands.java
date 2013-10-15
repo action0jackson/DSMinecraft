@@ -187,18 +187,18 @@ public class Commands
 			int x;
 			int y;
 			int z;
-			int length;
-			int width;
-			int height;
+			int xLength;
+			int zLength;
+			int yLength;
 			try
 			{
 				// Try block type as integer
 				x = Integer.parseInt(args[0]);
 				y = Integer.parseInt(args[1]);
 				z = Integer.parseInt(args[2]);
-				length = Math.abs(Integer.parseInt(args[3]));
-				width = Math.abs(Integer.parseInt(args[4]));
-				height = Math.abs(Integer.parseInt(args[5]));
+				xLength = Math.abs(Integer.parseInt(args[3]));
+				zLength = Math.abs(Integer.parseInt(args[4]));
+				yLength = Math.abs(Integer.parseInt(args[5]));
 			}
 			catch (NumberFormatException ex)
 			{
@@ -253,17 +253,17 @@ public class Commands
 
 			Block block = world.getBlockAt(x, y, z);
 
-			for (int l = x; l < (x + length); l++)
+			for (int l = x; l < (x + xLength); l++)
 			{
-				for (int w = z; w < (z + width); w++)
+				for (int w = z; w < (z + zLength); w++)
 				{
-					for (int h = y; h < (y + height); h++)
+					for (int h = y; h < (y + yLength); h++)
 					{
 						block = world.getBlockAt(l, h, w);
 
 						// Determine if it is an inner block our outer block
-						if (l == x || l == (x + length - 1) || w == z || w == (z + width - 1) || h == y
-								|| h == (y + height - 1))
+						if (l == x || l == (x + xLength - 1) || w == z || w == (z + zLength - 1) || h == y
+								|| h == (y + yLength - 1))
 						{
 							block.setType(outerMaterial);
 						}

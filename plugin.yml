@@ -12,22 +12,22 @@ commands:
       permission-message: You don't have <permission>
    square:
       description: Creates a square of the specified material.
-      usage: /<command> <x> <y> <z> <length> <material>
+      usage: /<command> <x> <y> <z> <xyzlength> <material>
       permission: DSPlugin.square
       permission-message: You don't have <permission>      
    cube:
       description: Creates a cube of the specified material types.
-      usage: /<command> <x> <y> <z> <length> <outerMaterial> [innerMaterial]
+      usage: /<command> <x> <y> <z> <xzlength> <outerMaterial> [innerMaterial]
       permission: DSPlugin.cube
       permission-message: You don't have <permission>
    rectangle:
       description: Creates a rectangle of the specified material.
-      usage: /<command> <x> <y> <z> <length> <width> <material>
+      usage: /<command> <x> <y> <z> <xLength> <zLength> <material>
       permission: DSPlugin.rectangle
       permission-message: You don't have <permission>            
    cuboid:
       description: Creates a cuboid of the specified material types.
-      usage: /<command> <x> <y> <z> <length> <width> <height> <outerMaterial> [innerMaterial]
+      usage: /<command> <x> <y> <z> <xLength> <yLength> <zLength> <outerMaterial> [innerMaterial]
       permission: DSPlugin.cuboid
       permission-message: You don't have <permission>
    pyramid:
