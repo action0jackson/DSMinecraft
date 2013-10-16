@@ -196,9 +196,9 @@ public class Commands
 				x = Integer.parseInt(args[0]);
 				y = Integer.parseInt(args[1]);
 				z = Integer.parseInt(args[2]);
-				xLength = Math.abs(Integer.parseInt(args[3]));
-				zLength = Math.abs(Integer.parseInt(args[4]));
-				yLength = Math.abs(Integer.parseInt(args[5]));
+				xLength = Integer.parseInt(args[3]);
+				zLength = Integer.parseInt(args[4]);
+				yLength = Integer.parseInt(args[5]);
 			}
 			catch (NumberFormatException ex)
 			{
@@ -253,31 +253,33 @@ public class Commands
 
 			Block block = world.getBlockAt(x, y, z);
 
-			for (int l = x; l < (x + xLength); l++)
+			for (int l = x; Math.signum(xLength) == -1.0 ? l > (x + xLength) : l < (x + xLength); l += Math.rint(Math
+					.signum(xLength)))
 			{
-				for (int w = z; w < (z + zLength); w++)
+				for (int w = z; Math.signum(zLength) == -1.0 ? w > (z + zLength) : w < (z + zLength); w += Math
+						.rint(Math.signum(zLength)))
 				{
-					for (int h = y; h < (y + yLength); h++)
+					for (int h = y; Math.signum(yLength) == -1.0 ? h > (y + yLength) : h < (y + yLength); h += Math
+							.rint(Math.signum(yLength)))
 					{
 						block = world.getBlockAt(l, h, w);
 
 						// Determine if it is an inner block our outer block
-						if (l == x || l == (x + xLength - 1) || w == z || w == (z + zLength - 1) || h == y
-								|| h == (y + yLength - 1))
+						if (l == x || l == (x + xLength - Math.rint(Math.signum(xLength))) || w == z
+								|| w == (z + zLength - Math.rint(Math.signum(zLength))) || h == y
+								|| h == (y + yLength - Math.rint(Math.signum(yLength))))
 						{
 							block.setType(outerMaterial);
 						}
 						else
 						{
-							if (args.length == 8)
-							{
+							if (innerMaterial != null)
 								block.setType(innerMaterial);
-							}
 						}
 					}
 				}
 			}
-			sender.sendMessage("Box successfully created!");
+			sender.sendMessage("Cuboid successfully created!");
 			return true;
 		}
 
@@ -991,7 +993,8 @@ public class Commands
 			Location location = block.getLocation();
 
 			// First iterate height
-			for (int h = y; Math.signum(height) == -1.0 ? h >= y + height : h <= y + height; h+=Math.rint(Math.signum(height)))
+			for (int h = y; Math.signum(height) == -1.0 ? h >= y + height : h <= y + height; h += Math.rint(Math
+					.signum(height)))
 			{
 				double maxRadius = ((double) (radius2 - radius1) / height) * (h - y) + radius1;
 				double minAngle = Library.minRequiredAngle(maxRadius);
@@ -1156,7 +1159,8 @@ public class Commands
 
 			Location location = block.getLocation();
 
-			// Figure minAngle for worst case scenario (take greatest chord length)
+			// Figure minAngle for worst case scenario (take greatest chord
+			// length)
 			double minAngle = Library.minRequiredAngle(Math.max(Math.max(a, b), c));
 
 			// First iterate th circle
