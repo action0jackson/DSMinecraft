@@ -1159,9 +1159,14 @@ public class Commands
 
 			Location location = block.getLocation();
 
+			int maxChord = Math.max(Math.max(a, b), c);
+			double aChordDivision = 1.0 * a / maxChord;
+			double bChordDivision = 1.0 * b / maxChord;
+			double cChordDivision = 1.0 * c / maxChord;
+			
 			// Figure minAngle for worst case scenario (take greatest chord
 			// length)
-			double minAngle = Library.minRequiredAngle(Math.max(Math.max(a, b), c));
+			double minAngle = Library.minRequiredAngle(maxChord);			
 
 			// First iterate th circle
 			for (double th = 0; th <= maxTh; th += minAngle)
@@ -1169,128 +1174,27 @@ public class Commands
 				// Next iterate phi circle
 				for (double phi = 0; phi <= maxPhi; phi += minAngle)
 				{
-					// Next iterate over a chord
-					for (int aChord = 0; aChord <= a; aChord++)
+					for (int chord = 0; chord <= maxChord; chord++)
 					{
-						location.setX(Math.rint(x + aChord * Math.cos(th * Math.PI / 180)
+						location.setX(Math.rint(x + (aChordDivision * chord) * Math.cos(th * Math.PI / 180)
 								* Math.cos(phi * Math.PI / 180)));
 
-						// if b equals a use same loop
-						if (b == a)
+						location.setY(Math.rint(y + (bChordDivision * chord) * Math.sin(phi * Math.PI / 180)));
+
+						location.setZ(Math.rint(z + (cChordDivision * chord) * Math.sin(th * Math.PI / 180)
+								* Math.cos(phi * Math.PI / 180)));
+
+						block = world.getBlockAt(location);
+
+						if (Math.rint(aChordDivision * chord) == a || Math.rint(bChordDivision * chord) == b
+								|| Math.rint(cChordDivision * chord) == c)
 						{
-							location.setY(Math.rint(y + aChord * Math.sin(phi * Math.PI / 180)));
-
-							// Check if c equals a to use the same loop
-							if (c == a)
-							{
-								location.setZ(Math.rint(z + aChord * Math.sin(th * Math.PI / 180)
-										* Math.cos(phi * Math.PI / 180)));
-
-								block = world.getBlockAt(location);
-
-								if (aChord == a)
-								{
-									block.setType(outerMaterial);
-								}
-								else
-								{
-									block.setType(innerMaterial);
-								}
-							}
-							else
-							{
-								// Need to iterate c chord since it is not equal
-								// to a
-								for (int cChord = 0; cChord <= c; cChord++)
-								{
-									location.setZ(Math.rint(z + cChord * Math.sin(th * Math.PI / 180)
-											* Math.cos(phi * Math.PI / 180)));
-
-									block = world.getBlockAt(location);
-
-									if (aChord == a || cChord == c)
-									{
-										block.setType(outerMaterial);
-									}
-									else
-									{
-										block.setType(innerMaterial);
-									}
-								}
-							}
+							block.setType(outerMaterial);
 						}
 						else
 						{
-							// Check if c equals a to use the same loop
-							if (c == a)
-							{
-								location.setZ(Math.rint(z + aChord * Math.sin(th * Math.PI / 180)
-										* Math.cos(phi * Math.PI / 180)));
-
-								// Next iterate over b chord
-								for (int bChord = 0; bChord <= b; bChord++)
-								{
-									location.setY(Math.rint(y + bChord * Math.sin(phi * Math.PI / 180)));
-
-									block = world.getBlockAt(location);
-
-									if (aChord == a || bChord == b)
-									{
-										block.setType(outerMaterial);
-									}
-									else
-									{
-										block.setType(innerMaterial);
-									}
-								}
-							}
-							else
-							{
-								// Next iterate over b chord
-								for (int bChord = 0; bChord <= b; bChord++)
-								{
-									location.setY(Math.rint(y + bChord * Math.sin(phi * Math.PI / 180)));
-
-									// Check if c equals b to use the same loop
-									if (c == b)
-									{
-										location.setZ(Math.rint(z + bChord * Math.sin(th * Math.PI / 180)
-												* Math.cos(phi * Math.PI / 180)));
-
-										block = world.getBlockAt(location);
-
-										if (aChord == a || bChord == c)
-										{
-											block.setType(outerMaterial);
-										}
-										else
-										{
-											block.setType(innerMaterial);
-										}
-									}
-									else
-									{
-										// Need to iterate c chord since it is
-										// not equal to b
-										for (int cChord = 0; cChord <= c; cChord++)
-										{
-											location.setZ(Math.rint(z + cChord * Math.sin(th * Math.PI / 180)
-													* Math.cos(phi * Math.PI / 180)));
-
-											block = world.getBlockAt(location);
-
-											if (aChord == a || bChord == b || cChord == c)
-											{
-												block.setType(outerMaterial);
-											}
-											else
-											{
-												block.setType(innerMaterial);
-											}
-										}
-									}
-								}
-							}
+							if (innerMaterial != null)
+								block.setType(innerMaterial);
 						}
 					}
 				}
