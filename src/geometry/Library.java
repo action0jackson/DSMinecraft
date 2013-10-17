@@ -1,4 +1,4 @@
-package dsPlugin;
+package geometry;
 
 import org.bukkit.Material;
 import org.bukkit.World;

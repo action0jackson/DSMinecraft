@@ -1,7 +1,7 @@
-package dsPlugin;
+package geometry;
 
-import dsPlugin.Library.Direction;
-import dsPlugin.Library.Heading;
+import geometry.Library.Direction;
+import geometry.Library.Heading;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

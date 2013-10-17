@@ -1,9 +1,9 @@
-package dsPlugin;
+package geometry;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.command.*;
 
-public final class DSPlugin extends JavaPlugin
+public final class Geometry extends JavaPlugin
 {
 	@Override
 	public void onEnable()

@@ -1,6 +1,6 @@
-name: DSPlugin
-main: dsPlugin.DSPlugin
-description: CraftBukkit Geometry Plugin (of sorts)
+name: Geometry
+main: geometry.Geometry
+description: CraftBukkit Geometry Plugin 
 author: Action0Jackson, GandalfsShoe
 version: 0.9.0
 
@@ -77,8 +77,8 @@ commands:
       permission-message: You don't have <permission>
       
 permissions:
-   DSPlugin.*:
-     description: Gives access to all DSPlugin commands
+   Geometry.*:
+     description: Gives access to all Geometry commands
      default: true
      children:
        DSPlugin.encase: true
@@ -95,46 +95,46 @@ permissions:
        DSPlugin.pyramid2: true
        DSPlugin.octahedron: true
        DSPlugin.ellipsoid: true
-   DSPlugin.encase:
+   Geometry.encase:
      description: Allows you to encase another player in specified material
      default: true
-   DSPlugin.square:
+   Geometry.square:
      description: Allows you to create a square of specified material
      default: true
-   DSPlugin.cube:
+   Geometry.cube:
      description: Allows you to create a cube of specified material
      default: true
-   DSPlugin.rectangle:
+   Geometry.rectangle:
      description: Allows you to create a rectangle of specified material
      default: true
-   DSPlugin.circle:
+   Geometry.circle:
      description: Allows you to create a circle of specified material
      default: true
-   DSPlugin.cuboid:
+   Geometry.cuboid:
      description: Allows you to create a cuboid of specified material
      default: true
-   DSPlugin.pyramid:
+   Geometry.pyramid:
      description: Allows you to create a pyramid of specified material
      default: true
-   DSPlugin.sphere:
+   Geometry.sphere:
      description: Allows you to create a sphere of specified material
      default: true
-   DSPlugin.tunnel:
+   Geometry.tunnel:
      description: Allows you to create a minecart tunnel
      default: true
-   DSPlugin.cone:
+   Geometry.cone:
      description: Allows you to create a cone of specified material
      default: true     
-   DSPlugin.cylinder:
+   Geometry.cylinder:
      description: Allows you to create a cylinder of specified material
      default: true
-   DSPlugin.pyramid2:
+   Geometry.pyramid2:
      description: Allows you to create a pyramid of specified material
      default: true
-   DSPlugin.octahedron:
+   Geometry.octahedron:
      description: Allows you to create an octahedron of specified material
      default: true
-   DSPlugin.ellipsoid:
+   Geometry.ellipsoid:
      description: Allows you to create an ellipsoid of specified material
      default: true 
       
