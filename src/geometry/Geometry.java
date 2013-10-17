@@ -8,13 +8,13 @@ public final class Geometry extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
-		getLogger().info("DSPlugin Succesfully Loaded!");
+		getLogger().info("Geometry Succesfully Loaded!");
 	}
 
 	@Override
 	public void onDisable()
 	{
-		getLogger().info("DSPlugin Succesfully Unloaded!");
+		getLogger().info("Geometry Succesfully Unloaded!");
 	}
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -74,6 +74,10 @@ public final class Geometry extends JavaPlugin
 		else if (cmd.getName().equalsIgnoreCase("ellipsoid"))
 		{
 			return Commands.ellipsoid(sender, cmd, label, args);
+		}
+		else if (cmd.getName().equalsIgnoreCase("ellipse"))
+		{
+			return Commands.ellipse(sender, cmd, label, args);
 		}
 
 		// If this hasn't happened, then a value of false will be returned.

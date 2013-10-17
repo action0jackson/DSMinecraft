@@ -1003,7 +1003,7 @@ public class Commands
 				for (double th = 0; th <= 360.0; th += minAngle)
 				{
 					// Next iterate over radius
-					for (int r = 0; r <= Math.rint(maxRadius); r++)
+					for (int r = (int) (innerMaterial != null ? 0 : Math.rint(maxRadius)); r <= Math.rint(maxRadius); r++)
 					{
 						location.setX(Math.rint(x + r * Math.cos(th * Math.PI / 180)));
 						location.setY(h);
@@ -1174,7 +1174,7 @@ public class Commands
 				// Next iterate phi circle
 				for (double phi = 0; phi <= maxPhi; phi += minAngle)
 				{
-					for (int chord = 0; chord <= maxChord; chord++)
+					for (int chord = (innerMaterial != null ? 0 : maxChord); chord <= maxChord; chord++)
 					{
 						location.setX(Math.rint(x + (aChordDivision * chord) * Math.cos(th * Math.PI / 180)
 								* Math.cos(phi * Math.PI / 180)));
@@ -1202,6 +1202,29 @@ public class Commands
 
 			sender.sendMessage("Ellipsoid successfully created!");
 			return true;
+		}
+
+		// If this hasn't happened the a value of false will be returned.
+		return false;
+	}
+
+	public static boolean ellipse(CommandSender sender, Command cmd, String label, String[] args)
+	{
+		if (args.length == 6)
+		{
+			String[] args2 = new String[10];
+			args2[0] = args[0]; // x
+			args2[1] = args[1]; // y
+			args2[2] = args[2]; // z
+			args2[3] = args[3]; // a
+			args2[4] = "1"; // b
+			args2[5] = args[4]; // c
+			args2[6] = args[5]; // outer material
+			args2[7] = args[5]; // Use same material for inside of circle
+			args2[8] = "360"; // Have maxTh be 360
+			args2[9] = "0"; // Have maxPhi be 0
+
+			return ellipsoid(sender, cmd, label, args2);
 		}
 
 		// If this hasn't happened the a value of false will be returned.

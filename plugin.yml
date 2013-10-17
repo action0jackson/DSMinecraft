@@ -2,78 +2,83 @@ name: Geometry
 main: geometry.Geometry
 description: CraftBukkit Geometry Plugin 
 author: Action0Jackson, GandalfsShoe
-version: 0.9.0
+version: 1.0.0
 
 commands:
    encase:
       description: Encases user in specified material.
       usage: /<command> <player> <outermaterial> [innerMaterial]
-      permission: DSPlugin.encase
+      permission: Geometry.encase
       permission-message: You don't have <permission>
    square:
       description: Creates a square of the specified material.
       usage: /<command> <x> <y> <z> <xyzlength> <material>
-      permission: DSPlugin.square
+      permission: Geometry.square
       permission-message: You don't have <permission>      
    cube:
       description: Creates a cube of the specified material types.
       usage: /<command> <x> <y> <z> <xzlength> <outerMaterial> [innerMaterial]
-      permission: DSPlugin.cube
+      permission: Geometry.cube
       permission-message: You don't have <permission>
    rectangle:
       description: Creates a rectangle of the specified material.
       usage: /<command> <x> <y> <z> <xLength> <zLength> <material>
-      permission: DSPlugin.rectangle
+      permission: Geometry.rectangle
       permission-message: You don't have <permission>            
    cuboid:
       description: Creates a cuboid of the specified material types.
       usage: /<command> <x> <y> <z> <xLength> <yLength> <zLength> <outerMaterial> [innerMaterial]
-      permission: DSPlugin.cuboid
+      permission: Geometry.cuboid
       permission-message: You don't have <permission>
    pyramid:
       description: Creates a pyramid of the specified material and size.
       usage: /<command> <x> <y> <z> <baseLength> <outerMaterial> [innerMaterial]
-      permission: DSPlugin.pyramid
+      permission: Geometry.pyramid
       permission-message: You don't have <permission>
    circle:
       description: Creates a circle of the specified material types.
       usage: /<command> <x> <y> <z> <radius> <material>
-      permission: DSPlugin.circle
+      permission: Geometry.circle
       permission-message: You don't have <permission>      
    sphere:
       description: Creates a sphere of the specified material and size with center at x,y,z.
       usage: /<command> <x> <y> <z> <radius> <outermaterial> [innerMaterial] [maxTh] [maxPhi]
-      permission: DSPlugin.sphere
+      permission: Geometry.sphere
       permission-message: You don't have <permission>
    tunnel:
       description: Creates a minecart tunnel of specified size starting at x,y,z.
       usage: /<command> <x> <y> <z> <y-length-direction(N,S,E,W)> [y-length-direction(N,S,E,W)]...
-      permission: DSPlugin.tunnel
+      permission: Geometry.tunnel
       permission-message: You don't have <permission>
    cone:
       description: Create a cone of the specified material and size with center at x,y,z.
       usage: /<command> <x> <y> <z> <height> <radius1> <radius2> <outermaterial> [innerMaterial]
-      permission: DSPlugin.cone
+      permission: Geometry.cone
       permission-message: You don't have <permission>  
    cylinder:
       description: Create a cylinder of the specified material and size with center at x,y,z.
       usage: /<command> <x> <y> <z> <height> <radius> <outermaterial> [innerMaterial]
-      permission: DSPlugin.cylinder
+      permission: Geometry.cylinder
       permission-message: You don't have <permission>   
    pyramid2:
       description: Creates a pyramid of the specified material and size with center at x,y,z.  Negative radius will generate an inverted pyramid.
       usage: /<command> <x> <y> <z> <radius> <outerMaterial> [innerMaterial]
-      permission: DSPlugin.pyramid2
+      permission: Geometry.pyramid2
       permission-message: You don't have <permission>  
    octahedron:
       description: Creates an octahedron of the specified material and size with center at x,y,z.
       usage: /<command> <x> <y> <z> <radius> <outerMaterial> [innerMaterial]
-      permission: DSPlugin.octahedron
+      permission: Geometry.octahedron
       permission-message: You don't have <permission>
    ellipsoid:
       description: Creates an ellipsoid of the specified material and size.
       usage: /<command> <x> <y> <z> <a> <b> <c> <outerMaterial> [innerMaterial] [maxTh] [maxPhi]
-      permission: DSPlugin.ellipsoid
+      permission: Geometry.ellipsoid
+      permission-message: You don't have <permission>
+   ellipse:
+      description: Creates an ellipse of the specified material and size.
+      usage: /<command> <x> <y> <z> <a> <c> <material>
+      permission: Geometry.ellipse
       permission-message: You don't have <permission>
       
 permissions:
@@ -81,20 +86,21 @@ permissions:
      description: Gives access to all Geometry commands
      default: true
      children:
-       DSPlugin.encase: true
-       DSPlugin.square: true
-       DSPlugin.cube: true
-       DSPlugin.rectangle: true
-       DSPlugin.circle: true
-       DSPlugin.cuboid: true
-       DSPlugin.pyramid: true
-       DSPlugin.sphere: true
-       DSPlugin.tunnel: true
-       DSPlugin.cone: true
-       DSPlugin.cylinder: true
-       DSPlugin.pyramid2: true
-       DSPlugin.octahedron: true
-       DSPlugin.ellipsoid: true
+       Geometry.encase: true
+       Geometry.square: true
+       Geometry.cube: true
+       Geometry.rectangle: true
+       Geometry.circle: true
+       Geometry.cuboid: true
+       Geometry.pyramid: true
+       Geometry.sphere: true
+       Geometry.tunnel: true
+       Geometry.cone: true
+       Geometry.cylinder: true
+       Geometry.pyramid2: true
+       Geometry.octahedron: true
+       Geometry.ellipsoid: true
+       Geometry.ellipse: true
    Geometry.encase:
      description: Allows you to encase another player in specified material
      default: true
@@ -136,5 +142,8 @@ permissions:
      default: true
    Geometry.ellipsoid:
      description: Allows you to create an ellipsoid of specified material
-     default: true 
+     default: true
+   Geometry.ellipse:
+     description: Allows you to create an ellipse of specified material
+     default: true  
       
