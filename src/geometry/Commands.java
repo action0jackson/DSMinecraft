@@ -297,12 +297,14 @@ public class Commands
 			int y;
 			int z;
 			int baseLength;
+			int inverted = 1;
 			try
 			{
 				// Try block type as integer
 				x = Integer.parseInt(args[0]);
 				y = Integer.parseInt(args[1]);
 				z = Integer.parseInt(args[2]);
+				inverted = (int) Math.signum(Integer.parseInt(args[3]));
 				baseLength = Math.abs(Integer.parseInt(args[3]));
 			}
 			catch (NumberFormatException ex)
@@ -367,7 +369,7 @@ public class Commands
 					// iterate over width
 					for (int w = (z + h - 1); w < (z + (baseLength - (h - 1))); w++)
 					{
-						block = world.getBlockAt(l, h + y - 1, w);
+						block = world.getBlockAt(l, inverted * h + y - inverted * 1, w);
 
 						// Determine if it is an inner block our outer block
 						if (l == (x + h - 1) || l == (x + (baseLength - (h - 1)) - 1) || w == (z + h - 1)
@@ -376,27 +378,45 @@ public class Commands
 						{
 							if (outerMaterial.name().contains("STAIRS"))
 							{
-								if (w == (z + h - 1)) // Orientation 1
+								if (w == (z + h - 1) && inverted == 1) // Orientation1
 								{
 									block.setType(outerMaterial);
 									block.setData((byte) 2, true);
 								}
-								else if (l == (x + h - 1)) // Orientation 2
+								else if (l == (x + h - 1) && inverted == 1) // Orientation2
 								{
 									block.setType(outerMaterial);
 									block.setData((byte) 0, true);
 								}
-								else if (w == (z + (baseLength - (h - 1)) - 1)) // Orientation
-																				// 3
+								else if (w == (z + (baseLength - (h - 1)) - 1) && inverted == 1) // Orientation3
 								{
 									block.setType(outerMaterial);
 									block.setData((byte) 3, true);
 								}
-								else if (l == (x + (baseLength - (h - 1)) - 1)) // Orientation
-																				// 4
+								else if (l == (x + (baseLength - (h - 1)) - 1) && inverted == 1) // Orientation4
 								{
 									block.setType(outerMaterial);
 									block.setData((byte) 1, true);
+								}
+								else if (w == (z + h - 1) && inverted == -1) // Orientation5
+								{
+									block.setType(outerMaterial);
+									block.setData((byte) 6, true);
+								}
+								else if (l == (x + h - 1) && inverted == -1) // Orientation6
+								{
+									block.setType(outerMaterial);
+									block.setData((byte) 4, true);
+								}
+								else if (w == (z + (baseLength - (h - 1)) - 1) && inverted == -1) // Orientation7
+								{
+									block.setType(outerMaterial);
+									block.setData((byte) 7, true);
+								}
+								else if (l == (x + (baseLength - (h - 1)) - 1) && inverted == -1) // Orientation8
+								{
+									block.setType(outerMaterial);
+									block.setData((byte) 5, true);
 								}
 							}
 							else
@@ -1163,10 +1183,10 @@ public class Commands
 			double aChordDivision = 1.0 * a / maxChord;
 			double bChordDivision = 1.0 * b / maxChord;
 			double cChordDivision = 1.0 * c / maxChord;
-			
+
 			// Figure minAngle for worst case scenario (take greatest chord
 			// length)
-			double minAngle = Library.minRequiredAngle(maxChord);			
+			double minAngle = Library.minRequiredAngle(maxChord);
 
 			// First iterate th circle
 			for (double th = 0; th <= maxTh; th += minAngle)

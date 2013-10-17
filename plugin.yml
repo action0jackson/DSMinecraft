@@ -31,7 +31,7 @@ commands:
       permission: Geometry.cuboid
       permission-message: You don't have <permission>
    pyramid:
-      description: Creates a pyramid of the specified material and size.
+      description: Creates a pyramid of the specified material and size. Negative baseLength will generate an inverted pyramid.
       usage: /<command> <x> <y> <z> <baseLength> <outerMaterial> [innerMaterial]
       permission: Geometry.pyramid
       permission-message: You don't have <permission>
