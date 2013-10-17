@@ -1,4 +1,4 @@
-DSMinecraft
+Geometry
 ===========
 
 CraftBukkit Plugin for Minecraft
