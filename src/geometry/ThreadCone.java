@@ -10,14 +10,14 @@ import org.bukkit.entity.Player;
 public class ThreadCone implements Runnable
 {
 	private CommandSender sender;
-	private String[] args;	
+	private String[] args;
 
 	public ThreadCone(CommandSender sender, String[] args)
 	{
 		this.sender = sender;
-		this.args = args;
-	}
-	
+		this.args = args;		
+	}	   
+
 	@Override
 	public void run()
 	{
@@ -30,13 +30,15 @@ public class ThreadCone implements Runnable
 			int height;
 			int radius1;
 			int radius2;
+			double inverted = 1.0;
 			try
 			{
 				// Try block type as integer
 				x = Integer.parseInt(args[0]);
 				y = Integer.parseInt(args[1]);
 				z = Integer.parseInt(args[2]);
-				height = Integer.parseInt(args[3]);
+				inverted = Math.signum(Integer.parseInt(args[3]));
+				height = Math.abs(Integer.parseInt(args[3]));
 				radius1 = Math.abs(Integer.parseInt(args[4]));
 				radius2 = Math.abs(Integer.parseInt(args[5]));
 			}
@@ -96,25 +98,24 @@ public class ThreadCone implements Runnable
 			Location location = block.getLocation();
 
 			// First iterate height
-			for (int h = y; Math.signum(height) == -1.0 ? h >= y + height : h <= y + height; h += Math.rint(Math
-					.signum(height)))
+			for (int h = 1; h <= height; h++)
 			{
-				double maxRadius = ((double) (radius2 - radius1) / height) * (h - y) + radius1;
+				double maxRadius = ((double) (radius2 - radius1) / (height - 1)) * (h - 1) + radius1;
 				double minAngle = Library.minRequiredAngle(maxRadius);
 
 				// Next iterate th circle
-				for (double th = 0; th <= 360.0; th += minAngle)
+				for (double th = 0; th <= 360; th += minAngle)
 				{
 					// Next iterate over radius
-					for (int r = (int) (innerMaterial != null ? 0 : Math.rint(maxRadius)); r <= Math.rint(maxRadius); r++)
+					for (int r = 0; r <= maxRadius; r++)
 					{
 						location.setX(Math.rint(x + r * Math.cos(th * Math.PI / 180)));
-						location.setY(h);
+						location.setY(inverted * h + y - inverted * 1);
 						location.setZ(Math.rint(z + r * Math.sin(th * Math.PI / 180)));
 
 						block = world.getBlockAt(location);
 
-						if (r == Math.rint(maxRadius) || h == y || h == y + height)
+						if (r == Math.rint(maxRadius) || h == y || h == y + height - 1)
 						{
 							block.setType(outerMaterial);
 						}

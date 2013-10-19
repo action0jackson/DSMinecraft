@@ -116,7 +116,7 @@ public class ThreadEllipsoid implements Runnable
 				// Next iterate phi circle
 				for (double phi = 0; phi <= maxPhi; phi += minAngle)
 				{
-					for (int chord = (innerMaterial != null ? 0 : maxChord); chord <= maxChord; chord++)
+					for (int chord = (innerMaterial != null ? 0 : maxChord); chord <= maxChord; ++chord)
 					{
 						location.setX(Math.rint(x + (aChordDivision * chord) * Math.cos(th * Math.PI / 180)
 								* Math.cos(phi * Math.PI / 180)));
@@ -137,16 +137,6 @@ public class ThreadEllipsoid implements Runnable
 						{
 							if (innerMaterial != null)
 								block.setType(innerMaterial);
-						}
-						
-						try
-						{
-							Thread.sleep(1);
-						}
-						catch (InterruptedException e)
-						{
-							// TODO Auto-generated catch block
-							e.printStackTrace();
 						}
 					}
 				}
