@@ -6,18 +6,22 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import geometry.BlockSetType;
+import geometry.BlockSetStairFace;
+
 public class ThreadPyramid implements Runnable
 {
+	private Geometry plugin;
 	private CommandSender sender;
-	private String[] args;	
+	private String[] args;
 
-	public ThreadPyramid(CommandSender sender, String[] args)
+	public ThreadPyramid(Geometry plugin, CommandSender sender, String[] args)
 	{
+		this.plugin = plugin;
 		this.sender = sender;
 		this.args = args;
 	}
 		
-	@SuppressWarnings("deprecation")
 	@Override	
 	public void run()
 	{
@@ -101,65 +105,89 @@ public class ThreadPyramid implements Runnable
 					for (int w = (z + h - 1); w < (z + (baseLength - (h - 1))); w++)
 					{
 						block = world.getBlockAt(l, inverted * h + y - inverted * 1, w);
+						
+						// If we don't sleep here we get a read timeout
+						try
+						{
+							Thread.sleep(0, 10);
+						} 
+						catch (InterruptedException ex) 
+						{
+							Thread.currentThread().interrupt();
+						}
 
 						// Determine if it is an inner block our outer block
 						if (l == (x + h - 1) || l == (x + (baseLength - (h - 1)) - 1) || w == (z + h - 1)
 								|| w == (z + (baseLength - (h - 1)) - 1) || h == 1
 								|| h == (int) Math.ceil(baseLength / 2.0d))
 						{
+							// Check if block is already made of required material
+							if(block.getType() == outerMaterial)
+							{
+								continue;
+							}
+							
 							if (outerMaterial.name().contains("STAIRS"))
 							{
 								if (w == (z + h - 1) && inverted == 1) // Orientation1
 								{
-									block.setType(outerMaterial);
-									block.setData((byte) 2, true);
+									BlockSetStairFace bssf = new BlockSetStairFace(block, outerMaterial, (byte) 2);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bssf);
 								}
 								else if (l == (x + h - 1) && inverted == 1) // Orientation2
 								{
-									block.setType(outerMaterial);
-									block.setData((byte) 0, true);
+									BlockSetStairFace bssf = new BlockSetStairFace(block, outerMaterial, (byte) 0);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bssf);
 								}
 								else if (w == (z + (baseLength - (h - 1)) - 1) && inverted == 1) // Orientation3
 								{
-									block.setType(outerMaterial);
-									block.setData((byte) 3, true);
+									BlockSetStairFace bssf = new BlockSetStairFace(block, outerMaterial, (byte) 3);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bssf);
 								}
 								else if (l == (x + (baseLength - (h - 1)) - 1) && inverted == 1) // Orientation4
 								{
-									block.setType(outerMaterial);
-									block.setData((byte) 1, true);
+									BlockSetStairFace bssf = new BlockSetStairFace(block, outerMaterial, (byte) 1);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bssf);
 								}
 								else if (w == (z + h - 1) && inverted == -1) // Orientation5
 								{
-									block.setType(outerMaterial);
-									block.setData((byte) 6, true);
+									BlockSetStairFace bssf = new BlockSetStairFace(block, outerMaterial, (byte) 6);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bssf);
 								}
 								else if (l == (x + h - 1) && inverted == -1) // Orientation6
 								{
-									block.setType(outerMaterial);
-									block.setData((byte) 4, true);
+									BlockSetStairFace bssf = new BlockSetStairFace(block, outerMaterial, (byte) 4);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bssf);
 								}
 								else if (w == (z + (baseLength - (h - 1)) - 1) && inverted == -1) // Orientation7
 								{
-									block.setType(outerMaterial);
-									block.setData((byte) 7, true);
+									BlockSetStairFace bssf = new BlockSetStairFace(block, outerMaterial, (byte) 7);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bssf);
 								}
 								else if (l == (x + (baseLength - (h - 1)) - 1) && inverted == -1) // Orientation8
 								{
-									block.setType(outerMaterial);
-									block.setData((byte) 5, true);
+									BlockSetStairFace bssf = new BlockSetStairFace(block, outerMaterial, (byte) 5);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bssf);
 								}
 							}
 							else
-							{
-								block.setType(outerMaterial);
+							{							
+								BlockSetType bst = new BlockSetType(block, outerMaterial);
+								this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 							}
 						}
 						else
 						{
-							if (args.length == 6)
+							if (args.length == 6 && innerMaterial != null)
 							{
-								block.setType(innerMaterial);
+								// Check if block is already made of required material
+								if(block.getType() == innerMaterial)
+								{
+									continue;
+								}
+								
+								BlockSetType bst = new BlockSetType(block, innerMaterial);
+								this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 							}
 						}
 					}

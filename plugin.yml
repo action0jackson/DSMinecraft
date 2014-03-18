@@ -1,7 +1,7 @@
 name: Geometry
 main: geometry.Geometry
 description: CraftBukkit Geometry Plugin 
-author: Action0Jackson, GandalfsShoe
+author: Craig Jackson
 version: 1.0.0
 
 commands:

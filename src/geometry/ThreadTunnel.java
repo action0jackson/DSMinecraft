@@ -15,11 +15,13 @@ import org.bukkit.entity.Player;
 
 public class ThreadTunnel implements Runnable
 {
+	private Geometry plugin;
 	private CommandSender sender;
 	private String[] args;	
 
-	public ThreadTunnel(CommandSender sender, String[] args)
+	public ThreadTunnel(Geometry plugin, CommandSender sender, String[] args)
 	{
+		this.plugin = plugin;
 		this.sender = sender;
 		this.args = args;
 	}
@@ -115,6 +117,16 @@ public class ThreadTunnel implements Runnable
 							for (int w = x - 2; w <= x + 2; w++)
 							{
 								block = world.getBlockAt(w, h, z);
+								
+								// If we don't sleep here we get a read timeout
+								try
+								{
+									Thread.sleep(0, 10);
+								} 
+								catch (InterruptedException ex) 
+								{
+									Thread.currentThread().interrupt();
+								}
 
 								if (heading != 0 && (l == 0 && (w < x) || l == 1 && (w == x - 2))
 										&& headings.get(heading - 1).get_direction() == Direction.E)
@@ -128,26 +140,61 @@ public class ThreadTunnel implements Runnable
 								}
 								else if (w == x - 2 || w == x + 2 || h == y + 5)
 								{
-									block.setType(Material.GLASS);
+									// Check if block is already made of required material
+									if(block.getType() == Material.GLASS)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.GLASS);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 								else if (h == y && (w == x - 1 || w == x + 1))
 								{
-									block.setType(Material.GLOWSTONE);
+									// Check if block is already made of required material
+									if(block.getType() == Material.GLOWSTONE)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.GLOWSTONE);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 								else if (h == y
 										&& w == x
 										&& ((heading == 0 && l == 0) || (heading == headings.size() - 1 && l == headings
 												.get(heading).get_length() - 1)))
 								{
-									block.setType(Material.DIRT);
+									// Check if block is already made of required material
+									if(block.getType() == Material.DIRT)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.DIRT);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 								else if (h == y && w == x && (heading != 0 || l != 0))
 								{
-									block.setType(Material.REDSTONE_BLOCK);
+									// Check if block is already made of required material
+									if(block.getType() == Material.REDSTONE_BLOCK)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.REDSTONE_BLOCK);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 								else
 								{
-									block.setType(Material.AIR);
+									// Check if block is already made of required material
+									if(block.getType() == Material.AIR)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.AIR);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 							}
 						}
@@ -163,15 +210,36 @@ public class ThreadTunnel implements Runnable
 
 									if (w == x - 2 || w == x + 2 || h == y + 5)
 									{
-										block.setType(Material.GLASS);
+										// Check if block is already made of required material
+										if(block.getType() == Material.GLASS)
+										{
+											continue;
+										}
+										
+										BlockSetType bst = new BlockSetType(block, Material.GLASS);
+										this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 									}
 									else if (h == y && (w == x - 1 || w == x + 1 || w == x))
 									{
-										block.setType(Material.GLOWSTONE);
+										// Check if block is already made of required material
+										if(block.getType() == Material.GLOWSTONE)
+										{
+											continue;
+										}
+												
+										BlockSetType bst = new BlockSetType(block, Material.GLOWSTONE);
+										this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 									}
 									else
 									{
-										block.setType(Material.AIR);
+										// Check if block is already made of required material
+										if(block.getType() == Material.AIR)
+										{
+											continue;
+										}
+										
+										BlockSetType bst = new BlockSetType(block, Material.AIR);
+										this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 									}
 								}
 							}
@@ -181,8 +249,14 @@ public class ThreadTunnel implements Runnable
 								for (int w = x - 2; w <= x + 2; w++)
 								{
 									block = world.getBlockAt(w, h, z - 2);
-									block.setType(Material.GLASS);
-								}
+									// Check if block is already made of required material
+									if(block.getType() == Material.GLASS)
+									{
+										continue;
+									}
+
+									BlockSetType bst = new BlockSetType(block, Material.GLASS);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);								}
 							}
 						}
 					}
@@ -210,26 +284,61 @@ public class ThreadTunnel implements Runnable
 								}
 								else if (w == x - 2 || w == x + 2 || h == y + 5)
 								{
-									block.setType(Material.GLASS);
+									// Check if block is already made of required material
+									if(block.getType() == Material.GLASS)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.GLASS);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 								else if (h == y && (w == x - 1 || w == x + 1))
 								{
-									block.setType(Material.GLOWSTONE);
+									// Check if block is already made of required material
+									if(block.getType() == Material.GLOWSTONE)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.GLOWSTONE);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 								else if (h == y
 										&& w == x
 										&& ((heading == 0 && l == 0) || (heading == headings.size() - 1 && l == headings
 												.get(heading).get_length() - 1)))
 								{
-									block.setType(Material.DIRT);
+									// Check if block is already made of required material
+									if(block.getType() == Material.DIRT)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.DIRT);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 								else if (h == y && w == x && (heading != 0 || l != 0))
 								{
-									block.setType(Material.REDSTONE_BLOCK);
+									// Check if block is already made of required material
+									if(block.getType() == Material.REDSTONE_BLOCK)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.REDSTONE_BLOCK);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 								else
 								{
-									block.setType(Material.AIR);
+									// Check if block is already made of required material
+									if(block.getType() == Material.AIR)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.AIR);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 							}
 						}
@@ -245,15 +354,36 @@ public class ThreadTunnel implements Runnable
 
 									if (w == x - 2 || w == x + 2 || h == y + 5)
 									{
-										block.setType(Material.GLASS);
+										// Check if block is already made of required material
+										if(block.getType() == Material.GLASS)
+										{
+											continue;
+										}
+										
+										BlockSetType bst = new BlockSetType(block, Material.GLASS);
+										this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 									}
 									else if (h == y && (w == x - 1 || w == x + 1 || w == x))
 									{
-										block.setType(Material.GLOWSTONE);
+										// Check if block is already made of required material
+										if(block.getType() == Material.GLOWSTONE)
+										{
+											continue;
+										}
+										
+										BlockSetType bst = new BlockSetType(block, Material.GLOWSTONE);
+										this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 									}
 									else
 									{
-										block.setType(Material.AIR);
+										// Check if block is already made of required material
+										if(block.getType() == Material.AIR)
+										{
+											continue;
+										}
+										
+										BlockSetType bst = new BlockSetType(block, Material.AIR);
+										this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 									}
 								}
 							}
@@ -263,7 +393,14 @@ public class ThreadTunnel implements Runnable
 								for (int w = x - 2; w <= x + 2; w++)
 								{
 									block = world.getBlockAt(w, h, z + 2);
-									block.setType(Material.GLASS);
+									// Check if block is already made of required material
+									if(block.getType() == Material.GLASS)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.GLASS);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 							}
 						}
@@ -292,26 +429,61 @@ public class ThreadTunnel implements Runnable
 								}
 								else if (w == z - 2 || w == z + 2 || h == y + 5)
 								{
-									block.setType(Material.GLASS);
+									// Check if block is already made of required material
+									if(block.getType() == Material.GLASS)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.GLASS);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 								else if (h == y && (w == z - 1 || w == z + 1))
 								{
-									block.setType(Material.GLOWSTONE);
+									// Check if block is already made of required material
+									if(block.getType() == Material.GLOWSTONE)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.GLOWSTONE);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 								else if (h == y
 										&& w == z
 										&& ((heading == 0 && l == 0) || (heading == headings.size() - 1 && l == headings
 												.get(heading).get_length() - 1)))
 								{
-									block.setType(Material.DIRT);
+									// Check if block is already made of required material
+									if(block.getType() == Material.DIRT)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.DIRT);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 								else if (h == y && w == z && (heading != 0 || l != 0))
 								{
-									block.setType(Material.REDSTONE_BLOCK);
+									// Check if block is already made of required material
+									if(block.getType() == Material.REDSTONE_BLOCK)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.REDSTONE_BLOCK);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 								else
 								{
-									block.setType(Material.AIR);
+									// Check if block is already made of required material
+									if(block.getType() == Material.AIR)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.AIR);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 							}
 						}
@@ -327,15 +499,36 @@ public class ThreadTunnel implements Runnable
 
 									if (w == z - 2 || w == z + 2 || h == y + 5)
 									{
-										block.setType(Material.GLASS);
+										// Check if block is already made of required material
+										if(block.getType() == Material.GLASS)
+										{
+											continue;
+										}
+										
+										BlockSetType bst = new BlockSetType(block, Material.GLASS);
+										this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 									}
 									else if (h == y && (w == z - 1 || w == z + 1 || w == z))
 									{
-										block.setType(Material.GLOWSTONE);
+										// Check if block is already made of required material
+										if(block.getType() == Material.GLOWSTONE)
+										{
+											continue;
+										}
+										
+										BlockSetType bst = new BlockSetType(block, Material.GLOWSTONE);
+										this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 									}
 									else
 									{
-										block.setType(Material.AIR);
+										// Check if block is already made of required material
+										if(block.getType() == Material.AIR)
+										{
+											continue;
+										}
+										
+										BlockSetType bst = new BlockSetType(block, Material.AIR);
+										this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 									}
 								}
 							}
@@ -345,7 +538,14 @@ public class ThreadTunnel implements Runnable
 								for (int w = z - 2; w <= z + 2; w++)
 								{
 									block = world.getBlockAt(x + 2, h, w);
-									block.setType(Material.GLASS);
+									// Check if block is already made of required material
+									if(block.getType() == Material.GLASS)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.GLASS);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 							}
 						}
@@ -374,26 +574,61 @@ public class ThreadTunnel implements Runnable
 								}
 								else if (w == z - 2 || w == z + 2 || h == y + 5)
 								{
-									block.setType(Material.GLASS);
+									// Check if block is already made of required material
+									if(block.getType() == Material.GLASS)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.GLASS);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 								else if (h == y && (w == z - 1 || w == z + 1))
 								{
-									block.setType(Material.GLOWSTONE);
+									// Check if block is already made of required material
+									if(block.getType() == Material.GLOWSTONE)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.GLOWSTONE);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 								else if (h == y
 										&& w == z
 										&& ((heading == 0 && l == 0) || (heading == headings.size() - 1 && l == headings
 												.get(heading).get_length() - 1)))
 								{
-									block.setType(Material.DIRT);
+									// Check if block is already made of required material
+									if(block.getType() == Material.DIRT)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.DIRT);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 								else if (h == y && w == z && (heading != 0 || l != 0))
 								{
-									block.setType(Material.REDSTONE_BLOCK);
+									// Check if block is already made of required material
+									if(block.getType() == Material.REDSTONE_BLOCK)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.REDSTONE_BLOCK);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 								else
 								{
-									block.setType(Material.AIR);
+									// Check if block is already made of required material
+									if(block.getType() == Material.AIR)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.AIR);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 							}
 						}
@@ -409,15 +644,36 @@ public class ThreadTunnel implements Runnable
 
 									if (w == z - 2 || w == z + 2 || h == y + 5)
 									{
-										block.setType(Material.GLASS);
+										// Check if block is already made of required material
+										if(block.getType() == Material.GLASS)
+										{
+											continue;
+										}
+										
+										BlockSetType bst = new BlockSetType(block, Material.GLASS);
+										this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 									}
 									else if (h == y && (w == z - 1 || w == z + 1 || w == z))
 									{
-										block.setType(Material.GLOWSTONE);
+										// Check if block is already made of required material
+										if(block.getType() == Material.GLOWSTONE)
+										{
+											continue;
+										}
+										
+										BlockSetType bst = new BlockSetType(block, Material.GLOWSTONE);
+										this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 									}
 									else
 									{
-										block.setType(Material.AIR);
+										// Check if block is already made of required material
+										if(block.getType() == Material.AIR)
+										{
+											continue;
+										}
+										
+										BlockSetType bst = new BlockSetType(block, Material.AIR);
+										this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 									}
 								}
 							}
@@ -427,7 +683,14 @@ public class ThreadTunnel implements Runnable
 								for (int w = z - 2; w <= z + 2; w++)
 								{
 									block = world.getBlockAt(x - 2, h, w);
-									block.setType(Material.GLASS);
+									// Check if block is already made of required material
+									if(block.getType() == Material.GLASS)
+									{
+										continue;
+									}
+									
+									BlockSetType bst = new BlockSetType(block, Material.GLASS);
+									this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 								}
 							}
 						}
@@ -439,17 +702,38 @@ public class ThreadTunnel implements Runnable
 							|| (heading == headings.size() - 1 && l == headings.get(heading).get_length() - 2)
 							|| (heading != 0 && l == 0))
 					{
-						block2.setType(Material.RAILS);
+						// Check if block is already made of required material
+						if(block2.getType() == Material.RAILS)
+						{
+							continue;
+						}
+						
+						BlockSetType bst = new BlockSetType(block2, Material.RAILS);
+						this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 					}
 					else if (heading == 0 && l == 0)
 					{
+						// Check if block is already made of required material
+						if(block.getType() == Material.POWERED_RAIL)
+						{
+							continue;
+						}
+						
 						// Drop minecart here
-						block2.setType(Material.POWERED_RAIL);
+						BlockSetType bst = new BlockSetType(block2, Material.POWERED_RAIL);
+						this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 						world.spawnEntity(block2.getLocation(), EntityType.MINECART);
 					}
 					else
 					{
-						block2.setType(Material.POWERED_RAIL);
+						// Check if block is already made of required material
+						if(block.getType() == Material.POWERED_RAIL)
+						{
+							continue;
+						}
+						
+						BlockSetType bst = new BlockSetType(block2, Material.POWERED_RAIL);
+						this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 					}
 				}
 			}

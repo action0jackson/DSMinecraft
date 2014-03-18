@@ -6,13 +6,17 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import geometry.BlockSetType;
+
 public class ThreadCuboid implements Runnable
 {
+	private Geometry plugin;
 	private CommandSender sender;
-	private String[] args;	
+	private String[] args;
 
-	public ThreadCuboid(CommandSender sender, String[] args)
+	public ThreadCuboid(Geometry plugin, CommandSender sender, String[] args)
 	{
+		this.plugin = plugin;
 		this.sender = sender;
 		this.args = args;
 	}
@@ -102,22 +106,49 @@ public class ThreadCuboid implements Runnable
 							.rint(Math.signum(yLength)))
 					{
 						block = world.getBlockAt(l, h, w);
+						
+						// If we don't sleep here we get a read timeout
+						try
+						{
+							Thread.sleep(0, 10);
+						} 
+						catch (InterruptedException ex) 
+						{
+							Thread.currentThread().interrupt();
+						}
 
 						// Determine if it is an inner block our outer block
 						if (l == x || l == (x + xLength - Math.rint(Math.signum(xLength))) || w == z
 								|| w == (z + zLength - Math.rint(Math.signum(zLength))) || h == y
 								|| h == (y + yLength - Math.rint(Math.signum(yLength))))
 						{
-							block.setType(outerMaterial);
+							// Check if block is already made of required material
+							if(block.getType() == outerMaterial)
+							{
+								continue;
+							}
+							
+							BlockSetType bst = new BlockSetType(block, outerMaterial);
+							this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 						}
 						else
 						{
 							if (innerMaterial != null)
-								block.setType(innerMaterial);
+							{
+								// Check if block is already made of required material
+								if(block.getType() == innerMaterial)
+								{
+									continue;
+								}
+								
+								BlockSetType bst = new BlockSetType(block, innerMaterial);
+								this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
+							}
 						}
 					}
 				}
 			}
+
 			sender.sendMessage("Cuboid successfully created!");
 		}
 	}

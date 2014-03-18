@@ -7,13 +7,21 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import geometry.BlockSetType;
+
 public class ThreadCone implements Runnable
 {
+	private Geometry plugin;
 	private CommandSender sender;
 	private String[] args;
+	private List<Location> setLocations =  new ArrayList<Location >();
 
-	public ThreadCone(CommandSender sender, String[] args)
+	public ThreadCone(Geometry plugin, CommandSender sender, String[] args)
 	{
+		this.plugin = plugin;
 		this.sender = sender;
 		this.args = args;		
 	}	   
@@ -93,9 +101,8 @@ public class ThreadCone implements Runnable
 				world = player.getWorld();
 			}
 
-			Block block = world.getBlockAt(x, y, z);
-
-			Location location = block.getLocation();
+			Location location = new Location(world, x, y, z);
+			Block block = location.getBlock();	
 
 			// First iterate height
 			for (int h = 1; h <= height; h++)
@@ -107,25 +114,62 @@ public class ThreadCone implements Runnable
 				for (double th = 0; th <= 360; th += minAngle)
 				{
 					// Next iterate over radius
-					for (int r = 0; r <= maxRadius; r++)
+					for (double r = 0; r <= maxRadius; r+=0.5)
 					{
 						location.setX(Math.rint(x + r * Math.cos(th * Math.PI / 180)));
 						location.setY(inverted * h + y - inverted * 1);
 						location.setZ(Math.rint(z + r * Math.sin(th * Math.PI / 180)));
 
-						block = world.getBlockAt(location);
+						block = location.getBlock();
+						
+						// Make sure we haven't already set this block
+						if(setLocations.contains(block.getLocation()))
+						{
+							continue;
+						}
+						
+						// Haven't set, add to list
+						setLocations.add(block.getLocation());
+						
+						// If we don't sleep here we get a read timeout
+						try
+						{
+							Thread.sleep(0, 10);
+						} 
+						catch (InterruptedException ex) 
+						{
+							Thread.currentThread().interrupt();
+						}
 
+						// Determine if it is an inner block our outer block					
 						if (r == Math.rint(maxRadius) || h == y || h == y + height - 1)
 						{
-							block.setType(outerMaterial);
+							// Check if block is already made of required material
+							if(block.getType() == outerMaterial)
+							{
+								continue;
+							}
+							
+							BlockSetType bst = new BlockSetType(block, outerMaterial);
+							this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 						}
 						else
 						{
 							if (innerMaterial != null)
-								block.setType(innerMaterial);
+							{
+								// Check if block is already made of required material
+								if(block.getType() == innerMaterial)
+								{
+									continue;
+								}
+								
+								BlockSetType bst = new BlockSetType(block, innerMaterial);
+								this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
+							}
 						}
 					}
 				}
+				setLocations.clear();
 			}
 
 			sender.sendMessage("Cone successfully created!");

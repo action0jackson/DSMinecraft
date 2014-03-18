@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class Commands
 {
-	public static boolean encase(CommandSender sender, Command cmd, String label, String[] args)
+	public static boolean encase(Geometry plugin, CommandSender sender, Command cmd, String label, String[] args)
 	{
 		Player culprit = null;
 		if ((sender instanceof Player))
@@ -88,7 +88,7 @@ public class Commands
 					args2[6] = outerMaterial.name();
 					args2[7] = innerMaterial.name();
 
-					cuboid(sender, cmd, label, args2);
+					cuboid(plugin, sender, cmd, label, args2);
 
 					target.sendMessage(ChatColor.BLUE + (culprit == null ? "Server" : culprit.getDisplayName())
 							+ ChatColor.WHITE + " has encased you in " + outerMaterial.name() + " and "
@@ -107,7 +107,7 @@ public class Commands
 		return false;
 	}
 
-	public static boolean square(CommandSender sender, Command cmd, String label, String[] args)
+	public static boolean square(Geometry plugin, CommandSender sender, Command cmd, String label, String[] args)
 	{
 		if (args.length == 5)
 		{
@@ -119,14 +119,14 @@ public class Commands
 			args2[4] = args[3]; // Width same as Length
 			args2[5] = args[4];
 
-			return rectangle(sender, cmd, label, args2);
+			return rectangle(plugin, sender, cmd, label, args2);
 		}
 
 		// If this hasn't happened the a value of false will be returned.
 		return false;
 	}
 
-	public static boolean cube(CommandSender sender, Command cmd, String label, String[] args)
+	public static boolean cube(Geometry plugin, CommandSender sender, Command cmd, String label, String[] args)
 	{
 		if (args.length == 5 || args.length == 6)
 		{
@@ -143,14 +143,14 @@ public class Commands
 				args2[7] = args[5];
 			}
 
-			return cuboid(sender, cmd, label, args2);
+			return cuboid(plugin, sender, cmd, label, args2);
 		}
 
 		// If this hasn't happened the a value of false will be returned.
 		return false;
 	}
 
-	public static boolean rectangle(CommandSender sender, Command cmd, String label, String[] args)
+	public static boolean rectangle(Geometry plugin, CommandSender sender, Command cmd, String label, String[] args)
 	{
 		if (args.length == 6)
 		{
@@ -163,28 +163,28 @@ public class Commands
 			args2[5] = "1"; // Height of 1
 			args2[6] = args[5];
 
-			return cuboid(sender, cmd, label, args2);
+			return cuboid(plugin, sender, cmd, label, args2);
 		}
 
 		// If this hasn't happened the a value of false will be returned.
 		return false;
 	}
 
-	public static boolean cuboid(CommandSender sender, Command cmd, String label, String[] args)
+	public static boolean cuboid(Geometry plugin, CommandSender sender, Command cmd, String label, String[] args)
 	{
-		Thread t = new Thread(new ThreadCuboid(sender, args));
+		Thread t = new Thread(new ThreadCuboid(plugin, sender, args));
 		t.start();
 		return true;
 	}
 
-	public static boolean pyramid(CommandSender sender, Command cmd, String label, String[] args)
+	public static boolean pyramid(Geometry plugin, CommandSender sender, Command cmd, String label, String[] args)
 	{
-		Thread t = new Thread(new ThreadPyramid(sender, args));
+		Thread t = new Thread(new ThreadPyramid(plugin, sender, args));
 		t.start();
 		return true;
 	}
 
-	public static boolean circle(CommandSender sender, Command cmd, String label, String[] args)
+	public static boolean circle(Geometry plugin, CommandSender sender, Command cmd, String label, String[] args)
 	{
 		if (args.length == 5)
 		{
@@ -198,14 +198,14 @@ public class Commands
 			args2[6] = "360"; // Have maxTh be 360
 			args2[7] = "0"; // Have maxPhi be 0
 
-			return sphere(sender, cmd, label, args2);
+			return sphere(plugin, sender, cmd, label, args2);
 		}
 
 		// If this hasn't happened the a value of false will be returned.
 		return false;
 	}
 
-	public static boolean sphere(CommandSender sender, Command cmd, String label, String[] args)
+	public static boolean sphere(Geometry plugin, CommandSender sender, Command cmd, String label, String[] args)
 	{
 		if (args.length > 4 && args.length < 9)
 		{
@@ -233,28 +233,28 @@ public class Commands
 				args2[9] = args[7];
 			}
 
-			return ellipsoid(sender, cmd, label, args2);
+			return ellipsoid(plugin, sender, cmd, label, args2);
 		}
 
 		// If this hasn't happened a value of false will be returned.
 		return false;
 	}
 
-	public static boolean tunnel(CommandSender sender, Command cmd, String label, String[] args)
+	public static boolean tunnel(Geometry plugin, CommandSender sender, Command cmd, String label, String[] args)
 	{
-		Thread t = new Thread(new ThreadTunnel(sender, args));
+		Thread t = new Thread(new ThreadTunnel(plugin, sender, args));
 		t.start();
 		return true;
 	}
 
-	public static boolean cone(CommandSender sender, Command cmd, String label, String[] args)
+	public static boolean cone(Geometry plugin, CommandSender sender, Command cmd, String label, String[] args)
 	{
-		Thread t = new Thread(new ThreadCone(sender, args));
+		Thread t = new Thread(new ThreadCone(plugin, sender, args));
 		t.start();
 		return true;
 	}
 
-	public static boolean cylinder(CommandSender sender, Command cmd, String label, String[] args)
+	public static boolean cylinder(Geometry plugin, CommandSender sender, Command cmd, String label, String[] args)
 	{
 		if (args.length == 6 || args.length == 7)
 		{
@@ -271,35 +271,35 @@ public class Commands
 				args2[7] = args[6]; // Inner Material
 			}
 
-			return cone(sender, cmd, label, args2);
+			return cone(plugin, sender, cmd, label, args2);
 		}
 
 		// If this hasn't happened the a value of false will be returned.
 		return false;
 	}
 
-	public static boolean pyramid2(CommandSender sender, Command cmd, String label, String[] args)
+	public static boolean pyramid2(Geometry plugin, CommandSender sender, Command cmd, String label, String[] args)
 	{
-		Thread t = new Thread(new ThreadPyramid2(sender, cmd, label, args));
+		Thread t = new Thread(new ThreadPyramid2(plugin, sender, cmd, label, args));
 		t.start();
 		return true;
 	}
 
-	public static boolean octahedron(CommandSender sender, Command cmd, String label, String[] args)
+	public static boolean octahedron(Geometry plugin, CommandSender sender, Command cmd, String label, String[] args)
 	{
-		Thread t = new Thread(new ThreadOctahedron(sender, cmd, label, args));
+		Thread t = new Thread(new ThreadOctahedron(plugin, sender, cmd, label, args));
 		t.start();
 		return true;
 	}
 
-	public static boolean ellipsoid(CommandSender sender, Command cmd, String label, String[] args)
+	public static boolean ellipsoid(Geometry plugin, CommandSender sender, Command cmd, String label, String[] args)
 	{
-		Thread t = new Thread(new ThreadEllipsoid(sender, args));
+		Thread t = new Thread(new ThreadEllipsoid(plugin, sender, args));
 		t.start();
 		return true;
 	}
 
-	public static boolean ellipse(CommandSender sender, Command cmd, String label, String[] args)
+	public static boolean ellipse(Geometry plugin, CommandSender sender, Command cmd, String label, String[] args)
 	{
 		if (args.length == 6)
 		{
@@ -315,7 +315,7 @@ public class Commands
 			args2[8] = "360"; // Have maxTh be 360
 			args2[9] = "0"; // Have maxPhi be 0
 
-			return ellipsoid(sender, cmd, label, args2);
+			return ellipsoid(plugin, sender, cmd, label, args2);
 		}
 
 		// If this hasn't happened the a value of false will be returned.

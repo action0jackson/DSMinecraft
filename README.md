@@ -3,4 +3,4 @@ Geometry
 
 CraftBukkit Plugin for Minecraft
 
-Tested and working with 1.6.2.
+Tested and working with 1.7.2.

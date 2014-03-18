@@ -21,63 +21,63 @@ public final class Geometry extends JavaPlugin
 	{
 		if (cmd.getName().equalsIgnoreCase("encase"))
 		{
-			return Commands.encase(sender, cmd, label, args);
+			return Commands.encase(this, sender, cmd, label, args);
 		}
 		else if (cmd.getName().equalsIgnoreCase("cuboid"))
 		{
-			return Commands.cuboid(sender, cmd, label, args);
+			return Commands.cuboid(this, sender, cmd, label, args);
 		}
 		else if (cmd.getName().equalsIgnoreCase("pyramid"))
 		{
-			return Commands.pyramid(sender, cmd, label, args);
+			return Commands.pyramid(this, sender, cmd, label, args);
 		}
 		else if (cmd.getName().equalsIgnoreCase("sphere"))
 		{
-			return Commands.sphere(sender, cmd, label, args);
+			return Commands.sphere(this, sender, cmd, label, args);
 		}
 		else if (cmd.getName().equalsIgnoreCase("tunnel"))
 		{
-			return Commands.tunnel(sender, cmd, label, args);
+			return Commands.tunnel(this, sender, cmd, label, args);
 		}
 		else if (cmd.getName().equalsIgnoreCase("cone"))
 		{
-			return Commands.cone(sender, cmd, label, args);
+			return Commands.cone(this, sender, cmd, label, args);
 		}
 		else if (cmd.getName().equalsIgnoreCase("cylinder"))
 		{
-			return Commands.cylinder(sender, cmd, label, args);
+			return Commands.cylinder(this, sender, cmd, label, args);
 		}
 		else if (cmd.getName().equalsIgnoreCase("pyramid2"))
 		{
-			return Commands.pyramid2(sender, cmd, label, args);
+			return Commands.pyramid2(this, sender, cmd, label, args);
 		}
 		else if (cmd.getName().equalsIgnoreCase("square"))
 		{
-			return Commands.square(sender, cmd, label, args);
+			return Commands.square(this, sender, cmd, label, args);
 		}
 		else if (cmd.getName().equalsIgnoreCase("rectangle"))
 		{
-			return Commands.rectangle(sender, cmd, label, args);
+			return Commands.rectangle(this, sender, cmd, label, args);
 		}
 		else if (cmd.getName().equalsIgnoreCase("cube"))
 		{
-			return Commands.cube(sender, cmd, label, args);
+			return Commands.cube(this, sender, cmd, label, args);
 		}
 		else if (cmd.getName().equalsIgnoreCase("circle"))
 		{
-			return Commands.circle(sender, cmd, label, args);
+			return Commands.circle(this, sender, cmd, label, args);
 		}
 		else if (cmd.getName().equalsIgnoreCase("octahedron"))
 		{
-			return Commands.octahedron(sender, cmd, label, args);
+			return Commands.octahedron(this, sender, cmd, label, args);
 		}
 		else if (cmd.getName().equalsIgnoreCase("ellipsoid"))
 		{
-			return Commands.ellipsoid(sender, cmd, label, args);
+			return Commands.ellipsoid(this, sender, cmd, label, args);
 		}
 		else if (cmd.getName().equalsIgnoreCase("ellipse"))
 		{
-			return Commands.ellipse(sender, cmd, label, args);
+			return Commands.ellipse(this, sender, cmd, label, args);
 		}
 
 		// If this hasn't happened, then a value of false will be returned.

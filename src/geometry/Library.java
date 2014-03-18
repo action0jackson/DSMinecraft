@@ -7,6 +7,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import geometry.BlockSetType;
+
 public class Library
 {
 	public static String concateLines(String[] s, String separator)
@@ -109,7 +111,7 @@ public class Library
 		public int Z = 0;
 	}
 
-	public static void createVerticalTriangle(World world, Coordinate startCoord, Material innerMaterial,
+	public static void createVerticalTriangle(Geometry plugin, World world, Coordinate startCoord, Material innerMaterial,
 			Material outerMaterial, int distance, boolean isInverted, boolean includeBase)
 	{
 		for (int y = startCoord.Y, xCounter = distance; xCounter >= 0; xCounter--)
@@ -120,17 +122,41 @@ public class Library
 			for (int x = minX; x <= maxX; x++)
 			{
 				Block block = world.getBlockAt(x, y, startCoord.Z);
+				
+				// If we don't sleep here we get a read timeout
+				try
+				{
+					Thread.sleep(0, 10);
+				} 
+				catch (InterruptedException ex) 
+				{
+					Thread.currentThread().interrupt();
+				}
 
-				// If last block, set to outerMaterial, otherwise innerMaterial.
+				// Determine if it is an inner block our outer block
 				if (x == minX || x == maxX || (y == startCoord.Y && includeBase))
 				{
-					block.setType(outerMaterial);
+					// Check if block is already made of required material
+					if(block.getType() == outerMaterial)
+					{
+						continue;
+					}
+					
+					BlockSetType bst = new BlockSetType(block, outerMaterial);
+					plugin.getServer().getScheduler().runTask(plugin, bst);
 				}
 				else
 				{
 					if (innerMaterial != null)
 					{
-						block.setType(innerMaterial);
+						// Check if block is already made of required material
+						if(block.getType() == innerMaterial)
+						{
+							continue;
+						}
+						
+						BlockSetType bst = new BlockSetType(block, innerMaterial);
+						plugin.getServer().getScheduler().runTask(plugin, bst);
 					}
 				}
 			}
@@ -147,7 +173,7 @@ public class Library
 		}
 	}
 
-	public static boolean createPyramid(CommandSender sender, Command cmd, String label, String[] args,
+	public static boolean createPyramid(Geometry plugin, CommandSender sender, Command cmd, String label, String[] args,
 			boolean includeBase)
 	{
 		if (args.length == 5 || args.length == 6)
@@ -226,16 +252,16 @@ public class Library
 			}
 
 			// Create the center triangle.
-			Library.createVerticalTriangle(world, new Library.Coordinate(x, y, z), innerMaterial, outerMaterial,
+			Library.createVerticalTriangle(plugin, world, new Library.Coordinate(x, y, z), innerMaterial, outerMaterial,
 					radius, isInverted, includeBase);
 
 			// Create consecutively smaller triangles in the +Z and -Z
 			// directions.
 			for (int r = radius - 1, zCounter = 1; r >= 0; r--, zCounter++)
 			{
-				createVerticalTriangle(world, new Library.Coordinate(x, y, z + zCounter), innerMaterial, outerMaterial,
+				createVerticalTriangle(plugin, world, new Library.Coordinate(x, y, z + zCounter), innerMaterial, outerMaterial,
 						r, isInverted, includeBase);
-				createVerticalTriangle(world, new Library.Coordinate(x, y, z - zCounter), innerMaterial, outerMaterial,
+				createVerticalTriangle(plugin, world, new Library.Coordinate(x, y, z - zCounter), innerMaterial, outerMaterial,
 						r, isInverted, includeBase);
 			}
 
@@ -251,7 +277,7 @@ public class Library
 	{
 		try
 		{
-			return 2 * Math.asin(1 / (2 * radius));
+			return (180 / Math.PI)*(2 * Math.asin(1 / (2 * radius)));
 		}
 		catch (Exception ex)
 		{

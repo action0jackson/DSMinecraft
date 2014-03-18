@@ -7,13 +7,21 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import geometry.BlockSetType;
+
 public class ThreadEllipsoid implements Runnable
 {
+	private Geometry plugin;
 	private CommandSender sender;
-	private String[] args;	
+	private String[] args;
+	private List<Location> setLocations =  new ArrayList<Location >();
 
-	public ThreadEllipsoid(CommandSender sender, String[] args)
+	public ThreadEllipsoid(Geometry plugin, CommandSender sender, String[] args)
 	{
+		this.plugin = plugin;
 		this.sender = sender;
 		this.args = args;
 	}
@@ -23,7 +31,7 @@ public class ThreadEllipsoid implements Runnable
 	{
 		if (args.length > 6 && args.length < 11)
 		{
-			// Make sure first 6 parameters can be parsed as a string
+			// Make sure first 6 parameters can be parsed as a int
 			int x;
 			int y;
 			int z;
@@ -97,27 +105,25 @@ public class ThreadEllipsoid implements Runnable
 				world = player.getWorld();
 			}
 
-			Block block = world.getBlockAt(x, y, z);
-
-			Location location = block.getLocation();
+			Location location = new Location(world, x, y, z);
+			Block block = location.getBlock();			
 
 			int maxChord = Math.max(Math.max(a, b), c);
 			double aChordDivision = 1.0 * a / maxChord;
 			double bChordDivision = 1.0 * b / maxChord;
 			double cChordDivision = 1.0 * c / maxChord;
 
-			// Figure minAngle for worst case scenario (take greatest chord
-			// length)
+			// Figure minAngle for worst case scenario (take greatest chord length)
 			double minAngle = Library.minRequiredAngle(maxChord);
-			
+
 			// First iterate th circle
 			for (double th = 0; th <= maxTh; th += minAngle)
 			{
 				// Next iterate phi circle
 				for (double phi = 0; phi <= maxPhi; phi += minAngle)
 				{
-					for (int chord = (innerMaterial != null ? 0 : maxChord); chord <= maxChord; ++chord)
-					{
+					for (double chord = (innerMaterial != null ? 0 : maxChord); chord <= maxChord; chord+=0.5)
+					{	
 						location.setX(Math.rint(x + (aChordDivision * chord) * Math.cos(th * Math.PI / 180)
 								* Math.cos(phi * Math.PI / 180)));
 
@@ -126,20 +132,59 @@ public class ThreadEllipsoid implements Runnable
 						location.setZ(Math.rint(z + (cChordDivision * chord) * Math.sin(th * Math.PI / 180)
 								* Math.cos(phi * Math.PI / 180)));
 
-						block = world.getBlockAt(location);
-
-						if (Math.rint(aChordDivision * chord) == a || Math.rint(bChordDivision * chord) == b
-								|| Math.rint(cChordDivision * chord) == c)
+						block = location.getBlock();
+						
+						// Make sure we haven't already set this block
+						if(setLocations.contains(block.getLocation()))
 						{
-							block.setType(outerMaterial);
+							continue;
+						}
+						
+						// Haven't set, add to list
+						setLocations.add(block.getLocation());
+						
+						// If we don't sleep here we get a read timeout
+						try
+						{
+							Thread.sleep(0, 10);
+						} 
+						catch (InterruptedException ex) 
+						{
+							Thread.currentThread().interrupt();
+						}
+
+						// Determine if it is an inner block our outer block
+						if ((int)Math.rint(aChordDivision * chord) == a || (int)Math.rint(bChordDivision * chord) == b
+								|| (int)Math.rint(cChordDivision * chord) == c)
+						{
+							// Check if block is already made of required material
+							if(block.getType() == outerMaterial)
+							{
+								continue;
+							}
+							
+							BlockSetType bst = new BlockSetType(block, outerMaterial);
+							this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
 						}
 						else
 						{
 							if (innerMaterial != null)
-								block.setType(innerMaterial);
+							{
+								// Check if block is already made of required material
+								if(block.getType() == innerMaterial)
+								{
+									continue;
+								}
+								
+								BlockSetType bst = new BlockSetType(block, innerMaterial);
+								this.plugin.getServer().getScheduler().runTask(this.plugin, bst);
+							}
 						}
 					}
 				}
+				
+				// Clear after each th iteration -- otherwise lookup in list is too time consuming
+				setLocations.clear();
 			}
 
 			sender.sendMessage("Ellipsoid successfully created!");
