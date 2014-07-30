@@ -31,8 +31,9 @@ public class ThreadCuboid implements Runnable
 			int y;
 			int z;
 			int xLength;
-			int zLength;
 			int yLength;
+			int zLength;
+
 			try
 			{
 				// Try block type as integer
@@ -40,8 +41,8 @@ public class ThreadCuboid implements Runnable
 				y = Integer.parseInt(args[1]);
 				z = Integer.parseInt(args[2]);
 				xLength = Integer.parseInt(args[3]);
-				zLength = Integer.parseInt(args[4]);
-				yLength = Integer.parseInt(args[5]);
+				yLength = Integer.parseInt(args[4]);
+				zLength = Integer.parseInt(args[5]);
 			}
 			catch (NumberFormatException ex)
 			{

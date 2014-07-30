@@ -12,12 +12,12 @@ commands:
       permission-message: You don't have <permission>
    square:
       description: Creates a square of the specified material.
-      usage: /<command> <x> <y> <z> <xyzlength> <material>
+      usage: /<command> <x> <y> <z> <xzlength> <material>
       permission: Geometry.square
       permission-message: You don't have <permission>      
    cube:
       description: Creates a cube of the specified material types.
-      usage: /<command> <x> <y> <z> <xzlength> <outerMaterial> [innerMaterial]
+      usage: /<command> <x> <y> <z> <xyzlength> <outerMaterial> [innerMaterial]
       permission: Geometry.cube
       permission-message: You don't have <permission>
    rectangle:
